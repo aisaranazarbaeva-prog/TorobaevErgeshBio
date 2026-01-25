@@ -3,7 +3,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Төрөбаев Эргеш Төрөбаевич</title>
+<title>{{ bio.full_name }}</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 
@@ -89,18 +89,18 @@ h1 {
 .image-block img {
     width: 100%;
     max-width: 760px;
-    height: auto;   /* авто высота */
-    object-fit: contain; /* не режет */
+    height: auto;
+    object-fit: contain;
     border-radius: 18px;
     box-shadow: 0 20px 45px rgba(0,0,0,0.18);
     background: #fdfcf8;
 }
 
-}
-
 </style>
 </head>
 <body>
+
+<!-- Декоративная линия сверху -->
 <div style="text-align:center; margin:30px 0; color:#6b5e4a; opacity:0.6; font-size:14px;">
     ───── ✦ ─────
 </div>
@@ -109,7 +109,9 @@ h1 {
 
 <!-- MAIN PROFILE -->
 <div class="profile">
-    <img src="{{ bio.main_photo.url }}" alt="Main photo">
+    {% if bio.main_photo %}
+        <img src="{{ bio.main_photo }}" alt="Main photo">
+    {% endif %}
     <h1>{{ bio.full_name }}</h1>
 
     {% if bio.quote %}
@@ -124,35 +126,37 @@ h1 {
 </div>
 {% endif %}
 
-<!-- ACHIEVEMENTS -->
+<!-- ACHIEVEMENTS / TEXT BLOCKS -->
 <div class="achievements">
-    <h2></h2>
+    <h2>Достижения</h2>
     {% for a in achievements %}
         <div class="achievement-item">{{ a.text }}</div>
     {% endfor %}
 </div>
 
 <!-- HERO PHOTO -->
-{% if hero_photo %}
+{% if hero_photo and hero_photo.image %}
 <div class="image-block">
-    <img src="{{ hero_photo.image.url }}" alt="Hero photo">
+    <img src="{{ hero_photo.image }}" alt="Hero photo">
 </div>
 {% endif %}
 
-<!-- OTHER ITEMS -->
+<!-- OTHER ITEMS (text и photo) -->
 {% for item in remaining_items %}
-    {% if item.item_type == "text" %}
+    {% if item.item_type == "text" and item.text %}
         <div class="text-block">
             {{ item.text }}
         </div>
-    {% elif item.item_type == "photo" %}
+    {% elif item.item_type == "photo" and item.image %}
         <div class="image-block">
-            <img src="{{ item.image.url }}" alt="Photo">
+            <img src="{{ item.image }}" alt="Photo">
         </div>
     {% endif %}
 {% endfor %}
 
 </div>
+
+<!-- Реклама / контакты снизу -->
 <div style="text-align:center; margin-top:50px; color:#6b5e4a; opacity:0.6; font-size:14px;">
     ───── ✦ ─────
     <p>Веб-баракча заказ кылуу үчүн</p>
