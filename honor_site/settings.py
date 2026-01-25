@@ -9,9 +9,9 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent  # Path используется для удобства
 
 # SECURITY
-SECRET_KEY = 'django-insecure-fsessi2w=*hm@%=j5pb=t_enp&t$zgf%@bwj4@4kslw8c=mu9*'
-DEBUG = True
-ALLOWED_HOSTS = []
+SECRET_KEY =  os.environ.get('SECRET_KEY')
+DEBUG = False
+ALLOWED_HOSTS = ["torobaevergeshbio.onrender.com"]
 
 # Application definition
 INSTALLED_APPS = [
