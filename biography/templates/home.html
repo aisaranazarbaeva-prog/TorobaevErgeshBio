@@ -110,8 +110,10 @@ h1 {
 <!-- MAIN PROFILE -->
 <div class="profile">
     {% if bio.main_photo_url %}
-    <img src="{{ bio.main_photo_url }}" alt="Main photo">
-{% endif %}
+        <img src="{{ bio.main_photo_url }}" alt="Main photo">
+    {% endif %}
+</div>
+
 
     {% if bio.quote %}
         <div class="quote">{{ bio.quote }}</div>
