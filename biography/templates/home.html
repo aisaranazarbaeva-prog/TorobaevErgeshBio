@@ -109,11 +109,8 @@ h1 {
 
 <!-- MAIN PROFILE -->
 <div class="profile">
-    {% if bio.main_photo_url %}
-        <img src="{{ bio.main_photo_url }}" alt="Main photo">
-    {% endif %}
-</div>
-
+    <img src="{{ bio.main_photo.url }}" alt="Main photo">
+    <h1>{{ bio.full_name }}</h1>
 
     {% if bio.quote %}
         <div class="quote">{{ bio.quote }}</div>
