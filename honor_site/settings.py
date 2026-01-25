@@ -5,6 +5,7 @@ Django settings for honor_site project.
 import os
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent  # Path используется для удобства
 
@@ -86,3 +87,20 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+import os
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+
+
+# Media
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dsh771ywn',
+    'API_KEY': '562496368689592',
+    'API_SECRET': 'iAhjfQGvMT4JCptH0cj_vR5sKgY'
+}
+
