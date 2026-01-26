@@ -7,18 +7,20 @@ from pathlib import Path
 import dj_database_url
 from django.core.management.utils import get_random_secret_key
 
-# BASE_DIR
+# ================= PATHS =================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ================= SECURITY =================
-# SECRET_KEY: берем из окружения, иначе генерируем временный для DEBUG
-SECRET_KEY = os.environ.get("SECRET_KEY", get_random_secret_key())
+# Берём SECRET_KEY из переменной окружения, иначе выдаём ошибку
+SECRET_KEY = os.environ.get("SECRET_KEY")
+if not SECRET_KEY:
+    raise Exception("SECRET_KEY environment variable not set!")
 
-# DEBUG: False для деплоя на Render, True только локально
+# DEBUG управляется через ENV, локально можно включить
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-# ALLOWED_HOSTS: указываем домен Render и localhost для теста
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "torobaevergeshbio.onrender.com").split(",")
+# Разрешённые хосты для Render и локально
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "torobaevergeshbio.onrender.com,127.0.0.1,localhost").split(",")
 
 # ================= APPS =================
 INSTALLED_APPS = [
@@ -28,8 +30,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Media через Cloudinary
     'cloudinary',
     'cloudinary_storage',
+
     'rest_framework',
     'biography',
 ]
@@ -37,6 +42,7 @@ INSTALLED_APPS = [
 # ================= MIDDLEWARE =================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # для статики в продакшн
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -69,9 +75,11 @@ WSGI_APPLICATION = 'honor_site.wsgi.application'
 # ================= DATABASE =================
 DATABASE_URL = os.environ.get("DATABASE_URL")
 if DATABASE_URL:
-    DATABASES = {'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)}
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+    }
 else:
-    # локальная SQLite для теста
+    # Локальная SQLite для тестов
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -88,16 +96,18 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # ================= INTERNATIONALIZATION =================
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# ================= STATIC & MEDIA =================
+# ================= STATIC =================
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # WhiteNoise будет использовать
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Cloudinary для медиа
+# ================= MEDIA =================
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CLOUDINARY_STORAGE = {
@@ -107,4 +117,4 @@ CLOUDINARY_STORAGE = {
 }
 
 # ================= OPTIONAL =================
-# Можно добавить настройки для Render (например, WhiteNoise для статики)
+# Любые дополнительные настройки Render можно добавить здесь
