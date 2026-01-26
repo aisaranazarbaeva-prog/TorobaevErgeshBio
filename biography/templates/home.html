@@ -95,12 +95,10 @@ h1 {
     box-shadow: 0 20px 45px rgba(0,0,0,0.18);
     background: #fdfcf8;
 }
-
 </style>
 </head>
 <body>
 
-<!-- Декоративная линия сверху -->
 <div style="text-align:center; margin:30px 0; color:#6b5e4a; opacity:0.6; font-size:14px;">
     ───── ✦ ─────
 </div>
@@ -112,6 +110,7 @@ h1 {
     {% if bio.main_photo %}
         <img src="{{ bio.main_photo }}" alt="Main photo">
     {% endif %}
+
     <h1>{{ bio.full_name }}</h1>
 
     {% if bio.quote %}
@@ -126,7 +125,7 @@ h1 {
 </div>
 {% endif %}
 
-<!-- ACHIEVEMENTS / TEXT BLOCKS -->
+<!-- ACHIEVEMENTS -->
 <div class="achievements">
     <h2></h2>
     {% for a in achievements %}
@@ -141,7 +140,7 @@ h1 {
 </div>
 {% endif %}
 
-<!-- OTHER ITEMS (text и photo) -->
+<!-- OTHER ITEMS -->
 {% for item in remaining_items %}
     {% if item.item_type == "text" and item.text %}
         <div class="text-block">
@@ -156,7 +155,6 @@ h1 {
 
 </div>
 
-<!-- Реклама / контакты снизу -->
 <div style="text-align:center; margin-top:50px; color:#6b5e4a; opacity:0.6; font-size:14px;">
     ───── ✦ ─────
     <p>Веб-баракча заказ кылуу үчүн</p>
