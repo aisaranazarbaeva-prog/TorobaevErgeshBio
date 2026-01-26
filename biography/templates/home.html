@@ -108,7 +108,7 @@ h1 {
 <!-- MAIN PROFILE -->
 <div class="profile">
     {% if bio.main_photo %}
-        <img src="{{ bio.main_photo }}" alt="Main photo">
+        <img src="{{ bio.main_photo.url }}" alt="Main photo">
     {% endif %}
 
     <h1>{{ bio.full_name }}</h1>
@@ -136,7 +136,7 @@ h1 {
 <!-- HERO PHOTO -->
 {% if hero_photo and hero_photo.image %}
 <div class="image-block">
-    <img src="{{ hero_photo.image }}" alt="Hero photo">
+    <img src="{{ hero_photo.image.url }}" alt="Hero photo">
 </div>
 {% endif %}
 
@@ -148,7 +148,7 @@ h1 {
         </div>
     {% elif item.item_type == "photo" and item.image %}
         <div class="image-block">
-            <img src="{{ item.image }}" alt="Photo">
+            <img src="{{ item.image.url }}" alt="Photo">
         </div>
     {% endif %}
 {% endfor %}
