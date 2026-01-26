@@ -6,8 +6,8 @@ import os
 from pathlib import Path
 import dj_database_url
 
-# ================= PATHS =================
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 # ================= SECURITY =================
 SECRET_KEY = os.environ.get("SECRET_KEY")
@@ -21,6 +21,7 @@ ALLOWED_HOSTS = os.environ.get(
     "torobaevergeshbio.onrender.com,127.0.0.1,localhost"
 ).split(",")
 
+
 # ================= APPS =================
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -30,7 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Media через Cloudinary
+    # Cloudinary (media)
     'cloudinary',
     'cloudinary_storage',
 
@@ -38,10 +39,11 @@ INSTALLED_APPS = [
     'biography',
 ]
 
+
 # ================= MIDDLEWARE =================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # для статики на Render
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # для статики
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -50,7 +52,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'honor_site.urls'
+
 
 # ================= TEMPLATES =================
 TEMPLATES = [
@@ -69,10 +73,13 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'honor_site.wsgi.application'
+
 
 # ================= DATABASE =================
 DATABASE_URL = os.environ.get("DATABASE_URL")
+
 if DATABASE_URL:
     DATABASES = {
         'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
@@ -85,6 +92,7 @@ else:
         }
     }
 
+
 # ================= PASSWORD VALIDATION =================
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -93,23 +101,27 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+
 # ================= INTERNATIONALIZATION =================
 LANGUAGE_CODE = 'ru'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
+
 # ================= STATIC =================
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# ================= MEDIA =================
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
+# ================= MEDIA (Cloudinary) =================
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'dsh771ywn'),
-    'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '562496368689592'),
-    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', 'iAhjfQGvMT4JCptH0cj_vR5sKgY'),
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
