@@ -5,129 +5,148 @@
 <meta charset="UTF-8">
 <title>{{ bio.full_name }}</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 body {
     margin: 0;
-    font-family: "Playfair Display", "Times New Roman", serif;
-    background: #fdfcf8;
-    color: #2b2b2b;
+    font-family: "Inter", sans-serif;
+    background: #f3f8ff;
+    color: #1f2d3d;
 }
 
 .container {
-    max-width: 900px;
+    max-width: 1100px;
     margin: auto;
-    padding: 50px 20px;
+    padding: 60px 20px;
 }
 
-/* PROFILE */
-.profile {
-    text-align: center;
-    margin-bottom: 60px;
-}
-
-.profile img {
-    width: 360px;
-    height: 460px;
-    object-fit: cover;
-    object-position: top;
-    border-radius: 22px;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.2);
-    margin-bottom: 25px;
-}
-
-h1 {
-    font-size: 42px;
-    margin-bottom: 10px;
-}
-
-.quote {
-    font-style: italic;
-    font-size: 20px;
-    color: #6b5e4a;
-    margin-bottom: 40px;
+/* HERO */
+.hero {
+    background: linear-gradient(135deg, #e9f2ff, #f7fbff);
+    border-radius: 30px;
+    padding: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
 }
 
 /* TEXT */
+.hero-text {
+    max-width: 500px;
+}
+
+.hero-text h1 {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+.hero-text p {
+    font-size: 18px;
+    line-height: 1.7;
+    color: #4a5a70;
+}
+
+.button {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 12px 28px;
+    background: #2f6bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+/* PHOTO */
+.hero-photo img {
+    width: 320px;
+    height: 420px;
+    object-fit: cover;
+    border-radius: 25px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+}
+
+/* CONTENT */
+.section {
+    margin-top: 60px;
+    background: white;
+    padding: 40px;
+    border-radius: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.section h2 {
+    margin-bottom: 20px;
+}
+
 .text-block {
-    font-size: 19px;
-    margin: 30px 0;
+    font-size: 17px;
     line-height: 1.8;
     white-space: pre-line;
 }
 
 /* ACHIEVEMENTS */
-.achievements {
-    background: #f3efe4;
-    padding: 30px;
-    border-radius: 20px;
-    margin: 40px 0;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-}
-
-.achievements h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 26px;
-}
-
 .achievement-item {
-    background: rgba(255,255,255,0.8);
+    background: #f1f5ff;
     padding: 12px 18px;
     border-radius: 12px;
     margin-bottom: 10px;
-    font-size: 17px;
 }
 
-/* CONTENT IMAGES */
-.image-block {
-    text-align: center;
-    margin: 40px 0;
-}
-
+/* IMAGE BLOCK */
 .image-block img {
     width: 100%;
-    max-width: 760px;
-    height: auto;
-    object-fit: contain;
-    border-radius: 18px;
-    box-shadow: 0 20px 45px rgba(0,0,0,0.18);
-    background: #fdfcf8;
+    border-radius: 20px;
+    margin-top: 30px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    margin-top:60px;
+    color:#5a6a80;
 }
 </style>
 </head>
-<body>
 
-<div style="text-align:center; margin:30px 0; color:#6b5e4a; opacity:0.6; font-size:14px;">
-    ───── ✦ ─────
-</div>
+<body>
 
 <div class="container">
 
-<!-- MAIN PROFILE -->
-<div class="profile">
-    {% if bio.main_photo %}
-        <img src="{{ bio.main_photo.url }}" alt="Main photo">
-    {% endif %}
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-text">
+        <h1>{{ bio.full_name }}</h1>
 
-    <h1>{{ bio.full_name }}</h1>
+        {% if bio.quote %}
+        <p><em>{{ bio.quote }}</em></p>
+        {% endif %}
 
-    {% if bio.quote %}
-        <div class="quote">{{ bio.quote }}</div>
-    {% endif %}
+        <a href="#about" class="button">Сүрөттөмө</a>
+    </div>
+
+    <div class="hero-photo">
+        {% if bio.main_photo %}
+        <img src="{{ bio.main_photo.url }}" alt="Photo">
+        {% endif %}
+    </div>
 </div>
 
 <!-- FIRST TEXT -->
 {% if first_text %}
-<div class="text-block">
-    {{ first_text.text }}
+<div id="about" class="section">
+    <div class="text-block">
+        {{ first_text.text }}
+    </div>
 </div>
 {% endif %}
 
 <!-- ACHIEVEMENTS -->
-<div class="achievements">
-    <h2></h2>
+<div class="section">
+    <h2>Жетишкендиктер</h2>
     {% for a in achievements %}
         <div class="achievement-item">{{ a.text }}</div>
     {% endfor %}
@@ -135,28 +154,29 @@ h1 {
 
 <!-- HERO PHOTO -->
 {% if hero_photo and hero_photo.image %}
-<div class="image-block">
-    <img src="{{ hero_photo.image.url }}" alt="Hero photo">
+<div class="section">
+    <div class="image-block">
+        <img src="{{ hero_photo.image.url }}" alt="Hero photo">
+    </div>
 </div>
 {% endif %}
 
 <!-- OTHER ITEMS -->
 {% for item in remaining_items %}
-    {% if item.item_type == "text" and item.text %}
-        <div class="text-block">
-            {{ item.text }}
-        </div>
-    {% elif item.item_type == "photo" and item.image %}
-        <div class="image-block">
-            <img src="{{ item.image.url }}" alt="Photo">
-        </div>
-    {% endif %}
+    <div class="section">
+        {% if item.item_type == "text" %}
+            <div class="text-block">{{ item.text }}</div>
+        {% elif item.item_type == "photo" %}
+            <div class="image-block">
+                <img src="{{ item.image.url }}">
+            </div>
+        {% endif %}
+    </div>
 {% endfor %}
 
 </div>
 
-<div style="text-align:center; margin-top:50px; color:#6b5e4a; opacity:0.6; font-size:14px;">
-    ───── ✦ ─────
+<div class="footer">
     <p>Веб-баракча заказ кылуу үчүн</p>
     <p>📞 +996 999 01 11 66 · 📧 aisaranazarbaeva@gmail.com</p>
 </div>
