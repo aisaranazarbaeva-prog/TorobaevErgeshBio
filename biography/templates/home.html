@@ -3,7 +3,6 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ bio.full_name }}</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -16,31 +15,6 @@ body {
     color: #1f2d3d;
 }
 
-/* NAVBAR */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 40px;
-    background: #ffffffcc; /* полупрозрачный фон */
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    backdrop-filter: blur(10px);
-}
-
-.navbar a {
-    text-decoration: none;
-    color: #1f2d3d;
-    margin-left: 25px;
-    font-weight: 600;
-}
-
-.navbar a:hover {
-    color: #2f6bff;
-}
-
-/* CONTAINER */
 .container {
     max-width: 1100px;
     margin: auto;
@@ -49,18 +23,16 @@ body {
 
 /* HERO */
 .hero {
-    position: relative;
     background: linear-gradient(135deg, #e9f2ff, #f7fbff);
     border-radius: 30px;
-    padding: 50px 30px;
+    padding: 50px;
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 40px;
-    overflow: hidden;
 }
 
+/* TEXT */
 .hero-text {
     max-width: 500px;
 }
@@ -87,7 +59,7 @@ body {
     font-weight: 600;
 }
 
-/* HERO PHOTO */
+/* PHOTO */
 .hero-photo img {
     width: 320px;
     height: 420px;
@@ -96,26 +68,7 @@ body {
     box-shadow: 0 20px 50px rgba(0,0,0,0.15);
 }
 
-/* SVG WAVES */
-.hero svg {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 150px;
-}
-
-.hero svg path {
-    fill: #f3f8ff;
-    animation: wave 6s infinite linear;
-}
-
-@keyframes wave {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
-}
-
-/* SECTION */
+/* CONTENT */
 .section {
     margin-top: 60px;
     background: white;
@@ -156,101 +109,70 @@ body {
     margin-top:60px;
     color:#5a6a80;
 }
-
-/* RESPONSIVE */
-@media (max-width: 768px) {
-    .hero {
-        flex-direction: column;
-        padding: 40px 20px;
-    }
-
-    .hero-photo img {
-        width: 100%;
-        max-width: 300px;
-        height: auto;
-    }
-
-    .navbar {
-        flex-direction: column;
-        gap: 10px;
-    }
-}
 </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-<div class="navbar">
-    <div class="logo"><strong>{{ bio.full_name }}</strong></div>
-    <div>
-        <a href="#about">Сүрөттөмө</a>
-        <a href="#achievements">Жетишкендиктер</a>
+<div class="container">
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-text">
+        <h1>{{ bio.full_name }}</h1>
+
+        {% if bio.quote %}
+        <p><em>{{ bio.quote }}</em></p>
+        {% endif %}
+
+        <a href="#about" class="button">Сүрөттөмө</a>
+    </div>
+
+    <div class="hero-photo">
+        {% if bio.main_photo %}
+        <img src="{{ bio.main_photo.url }}" alt="Photo">
+        {% endif %}
     </div>
 </div>
 
-<div class="container">
-
-    <!-- HERO -->
-    <div class="hero">
-        <div class="hero-text">
-            <h1>{{ bio.full_name }}</h1>
-            {% if bio.quote %}
-            <p><em>{{ bio.quote }}</em></p>
-            {% endif %}
-            <a href="#about" class="button">Сүрөттөмө</a>
-        </div>
-
-        <div class="hero-photo">
-            {% if bio.main_photo %}
-            <img src="{{ bio.main_photo.url }}" alt="Photo">
-            {% endif %}
-        </div>
-
-        <!-- SVG WAVES -->
-        <svg viewBox="0 0 1440 150" preserveAspectRatio="none">
-            <path d="M0,30 C360,100 1080,0 1440,50 L1440,150 L0,150 Z"></path>
-        </svg>
+<!-- FIRST TEXT -->
+{% if first_text %}
+<div id="about" class="section">
+    <div class="text-block">
+        {{ first_text.text }}
     </div>
+</div>
+{% endif %}
 
-    <!-- FIRST TEXT -->
-    {% if first_text %}
-    <div id="about" class="section">
-        <div class="text-block">
-            {{ first_text.text }}
-        </div>
-    </div>
-    {% endif %}
-
-    <!-- ACHIEVEMENTS -->
-    <div id="achievements" class="section">
-        <h2>Жетишкендиктер</h2>
-        {% for a in achievements %}
-            <div class="achievement-item">{{ a.text }}</div>
-        {% endfor %}
-    </div>
-
-    <!-- HERO PHOTO -->
-    {% if hero_photo and hero_photo.image %}
-    <div class="section">
-        <div class="image-block">
-            <img src="{{ hero_photo.image.url }}" alt="Hero photo">
-        </div>
-    </div>
-    {% endif %}
-
-    <!-- OTHER ITEMS -->
-    {% for item in remaining_items %}
-        <div class="section">
-            {% if item.item_type == "text" %}
-                <div class="text-block">{{ item.text }}</div>
-            {% elif item.item_type == "photo" %}
-                <div class="image-block">
-                    <img src="{{ item.image.url }}">
-                </div>
-            {% endif %}
-        </div>
+<!-- ACHIEVEMENTS -->
+<div class="section">
+    <h2>Жетишкендиктер</h2>
+    {% for a in achievements %}
+        <div class="achievement-item">{{ a.text }}</div>
     {% endfor %}
+</div>
+
+<!-- HERO PHOTO -->
+{% if hero_photo and hero_photo.image %}
+<div class="section">
+    <div class="image-block">
+        <img src="{{ hero_photo.image.url }}" alt="Hero photo">
+    </div>
+</div>
+{% endif %}
+
+<!-- OTHER ITEMS -->
+{% for item in remaining_items %}
+    <div class="section">
+        {% if item.item_type == "text" %}
+            <div class="text-block">{{ item.text }}</div>
+        {% elif item.item_type == "photo" %}
+            <div class="image-block">
+                <img src="{{ item.image.url }}">
+            </div>
+        {% endif %}
+    </div>
+{% endfor %}
 
 </div>
 
