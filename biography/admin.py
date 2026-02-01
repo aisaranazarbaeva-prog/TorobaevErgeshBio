@@ -1,33 +1,27 @@
-# models.py
-from django.db import models
-from cloudinary.models import CloudinaryField
+from django.contrib import admin
+from .models import Bio, BioItem
 
+# Inline для BioItem, чтобы редактировать элементы прямо в Bio
+class BioItemInline(admin.TabularInline):  # Можно использовать StackedInline для вертикального вида
+    model = BioItem
+    extra = 1  # сколько пустых форм добавлять
+    fields = ('item_type', 'text', 'image', 'image_description', 'youtube_url')
+    readonly_fields = ()
+    # Можно добавить фильтр по типу
+    show_change_link = True
 
-class Bio(models.Model):
-    full_name = models.CharField(max_length=255)
-    main_photo = CloudinaryField('image', blank=True, null=True)
-    quote = models.TextField(blank=True, null=True)
+@admin.register(Bio)
+class BioAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'quote')  # поля для отображения в списке
+    search_fields = ('full_name',)  # поиск по имени
+    inlines = [BioItemInline]  # добавляем BioItem прямо в Bio
+    list_per_page = 20  # сколько элементов на странице
+    # Если нужны кастомные поля в форме
+    # fields = ('full_name', 'main_photo', 'quote')
 
-    def __str__(self):
-        return self.full_name
-
-
-class BioItem(models.Model):
-    ITEM_TYPES = (
-        ('text', 'Text'),
-        ('photo', 'Photo'),
-        ('video', 'Video'),
-    )
-
-    bio = models.ForeignKey(Bio, related_name='items', on_delete=models.CASCADE)
-    item_type = models.CharField(max_length=10, choices=ITEM_TYPES)
-
-    text = models.TextField(blank=True, null=True)
-
-    image = CloudinaryField('image', blank=True, null=True)
-    image_description = models.TextField(blank=True, null=True)
-
-    youtube_url = models.URLField(blank=True, null=True)
-
-    def __str__(self):
-        return f"{self.bio.full_name} - {self.item_type}"
+@admin.register(BioItem)
+class BioItemAdmin(admin.ModelAdmin):
+    list_display = ('bio', 'item_type', 'text', 'youtube_url')
+    list_filter = ('item_type',)
+    search_fields = ('bio__full_name', 'text', 'image_description', 'youtube_url')
+    list_per_page = 20
