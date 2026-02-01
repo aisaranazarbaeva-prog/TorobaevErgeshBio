@@ -1,46 +1,33 @@
-from django.contrib import admin
-from .models import Bio, BioItem
-from django.utils.html import format_html
+# models.py
+from django.db import models
+from cloudinary.models import CloudinaryField
 
-# Inline для BioItem
-class BioItemInline(admin.StackedInline):
-    model = BioItem
-    extra = 1
-    readonly_fields = ('image_preview',)
 
-    def image_preview(self, obj):
-        if obj.image:
-            return format_html('<img src="{}" width="200" style="border-radius:10px;"/>', obj.image.url)
-        return ""
-    image_preview.short_description = "Превью фото"
+class Bio(models.Model):
+    full_name = models.CharField(max_length=255)
+    main_photo = CloudinaryField('image', blank=True, null=True)
+    quote = models.TextField(blank=True, null=True)
 
-    # Поля отображаются в зависимости от типа BioItem
-    def get_fields(self, request, obj=None):
-        # базовый набор полей
-        fields = ['item_type', 'text', 'image', 'image_description', 'youtube_url', 'image_preview']
-        if obj:
-            if obj.item_type == 'text':
-                fields.remove('image')
-                fields.remove('image_description')
-                fields.remove('youtube_url')
-            elif obj.item_type == 'photo':
-                fields.remove('text')
-                fields.remove('youtube_url')
-            elif obj.item_type == 'video':
-                fields.remove('text')
-                fields.remove('image')
-                fields.remove('image_description')
-        return fields
+    def __str__(self):
+        return self.full_name
 
-@admin.register(Bio)
-class BioAdmin(admin.ModelAdmin):
-    list_display = ('full_name',)
-    inlines = [BioItemInline]
 
-    readonly_fields = ('main_photo_preview',)
+class BioItem(models.Model):
+    ITEM_TYPES = (
+        ('text', 'Text'),
+        ('photo', 'Photo'),
+        ('video', 'Video'),
+    )
 
-    def main_photo_preview(self, obj):
-        if obj.main_photo:
-            return format_html('<img src="{}" width="300" style="border-radius:15px;"/>', obj.main_photo.url)
-        return ""
-    main_photo_preview.short_description = "Превью главного фото"
+    bio = models.ForeignKey(Bio, related_name='items', on_delete=models.CASCADE)
+    item_type = models.CharField(max_length=10, choices=ITEM_TYPES)
+
+    text = models.TextField(blank=True, null=True)
+
+    image = CloudinaryField('image', blank=True, null=True)
+    image_description = models.TextField(blank=True, null=True)
+
+    youtube_url = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.bio.full_name} - {self.item_type}"
