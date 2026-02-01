@@ -187,10 +187,9 @@ body {
         <div class="image-block">
             <img src="{{ item.image.url }}" alt="{{ item.image_description }}">
         </div>
-    {% elif item.item_type == "video" and item.youtube_url %}
+    {% elif item.item_type == "video" and item.youtube_embed_url %}
         <div class="video-block">
-            <iframe src="{{ item.youtube_url|replace:'watch?v=','embed/' }}"
-                    frameborder="0" allowfullscreen></iframe>
+            <iframe src="{{ item.youtube_embed_url }}" frameborder="0" allowfullscreen></iframe>
         </div>
     {% endif %}
 </div>

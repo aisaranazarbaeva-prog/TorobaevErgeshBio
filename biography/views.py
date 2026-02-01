@@ -14,11 +14,19 @@ def home(request):
     remaining_items = []
 
     for item in items:
+        # Находим главное фото
         if item.item_type == 'photo' and not hero_photo:
             hero_photo = item
+        # Находим первый текст
         elif item.item_type == 'text' and not first_text:
             first_text = item
         else:
+            # Для видео сразу формируем embed_url
+            if item.item_type == 'video' and item.youtube_url:
+                if "watch?v=" in item.youtube_url:
+                    item.youtube_embed_url = item.youtube_url.replace("watch?v=", "embed/")
+                else:
+                    item.youtube_embed_url = item.youtube_url
             remaining_items.append(item)
 
     achievement_texts = [
