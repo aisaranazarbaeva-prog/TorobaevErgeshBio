@@ -22,12 +22,13 @@ def home(request):
             first_text = item
         else:
             # Для видео сразу формируем embed_url
-            if item.item_type == 'video' and item.youtube_url:
-                if "watch?v=" in item.youtube_url:
-                    item.youtube_embed_url = item.youtube_url.replace("watch?v=", "embed/")
-                else:
-                    item.youtube_embed_url = item.youtube_url
-            remaining_items.append(item)
+            if "watch?v=" in item.youtube_url:
+                item.youtube_embed_url = item.youtube_url.replace("watch?v=", "embed/")
+            else:
+                # Если короткая ссылка youtu.be
+                if "youtu.be/" in item.youtube_url:
+                    video_id = item.youtube_url.split("/")[-1]
+                    item.youtube_embed_url = f"https://www.youtube.com/embed/{video_id}"
 
     achievement_texts = [
         "1971 жана 1979-жылдары Кыргыз ССРинин Жогорку Кеңешинин “Ардак Грамотасы” менен сыйланган.",
