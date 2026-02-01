@@ -8,126 +8,143 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
+/* ===== GLOBAL ===== */
 body {
     margin: 0;
     font-family: "Inter", sans-serif;
-    background: #f3f8ff;
+    background: #e6f0ff;
     color: #1f2d3d;
 }
-
 .container {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: auto;
     padding: 60px 20px;
 }
 
-/* HERO */
+/* ===== HERO ===== */
 .hero {
-    background: linear-gradient(135deg, #e9f2ff, #f7fbff);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    background: linear-gradient(135deg, #cce0ff, #e6f0ff);
     border-radius: 30px;
     padding: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 40px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.1);
 }
-
-/* TEXT */
 .hero-text {
-    max-width: 500px;
+    max-width: 600px;
 }
-
 .hero-text h1 {
-    font-size: 42px;
-    margin-bottom: 15px;
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #1a2a47;
 }
-
 .hero-text p {
-    font-size: 18px;
-    line-height: 1.7;
-    color: #4a5a70;
+    font-size: 20px;
+    line-height: 1.6;
+    color: #3a4d6a;
 }
-
 .button {
     display: inline-block;
     margin-top: 25px;
-    padding: 12px 28px;
+    padding: 14px 32px;
     background: #2f6bff;
-    color: white;
+    color: #fff;
     text-decoration: none;
-    border-radius: 10px;
+    border-radius: 15px;
     font-weight: 600;
+    transition: 0.3s;
 }
-
-/* PHOTO */
+.button:hover {
+    background: #1f4ed8;
+}
 .hero-photo img {
     width: 320px;
     height: 420px;
     object-fit: cover;
     border-radius: 25px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
 }
 
-/* CONTENT */
+/* ===== SECTION ===== */
 .section {
     margin-top: 60px;
-    background: white;
+    background: #ffffff;
     padding: 40px;
     border-radius: 25px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    box-shadow: 0 10px 35px rgba(0,0,0,0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
 }
-
+.section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+}
 .section h2 {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    color: #1a2a47;
 }
-
 .text-block {
     font-size: 17px;
     line-height: 1.8;
     white-space: pre-line;
+    color: #3a4d6a;
 }
-
-/* ACHIEVEMENTS */
-.achievement-item {
-    background: #f1f5ff;
-    padding: 12px 18px;
-    border-radius: 12px;
-    margin-bottom: 10px;
-}
-
-/* IMAGE BLOCK */
 .image-block img {
     width: 100%;
     border-radius: 20px;
-    margin-top: 30px;
+    margin-top: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+}
+.video-block iframe {
+    width: 100%;
+    height: 500px;
+    border-radius: 20px;
+    margin-top: 20px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.12);
 }
 
-/* FOOTER */
+/* ===== ACHIEVEMENTS ===== */
+.achievement-item {
+    background: #d6e4ff;
+    padding: 15px 20px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    font-weight: 500;
+    color: #1a2a47;
+    transition: 0.3s;
+}
+.achievement-item:hover {
+    background: #b3cfff;
+}
+
+/* ===== FOOTER ===== */
 .footer {
-    text-align:center;
-    margin-top:60px;
-    color:#5a6a80;
+    text-align: center;
+    margin-top: 60px;
+    color: #5a6a80;
+    font-size: 15px;
+}
+.footer p {
+    margin: 5px 0;
 }
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
 <!-- HERO -->
 <div class="hero">
     <div class="hero-text">
         <h1>{{ bio.full_name }}</h1>
-
         {% if bio.quote %}
         <p><em>{{ bio.quote }}</em></p>
         {% endif %}
-
         <a href="#about" class="button">Сүрөттөмө</a>
     </div>
-
     <div class="hero-photo">
         {% if bio.main_photo %}
         <img src="{{ bio.main_photo.url }}" alt="Photo">
@@ -138,19 +155,19 @@ body {
 <!-- FIRST TEXT -->
 {% if first_text %}
 <div id="about" class="section">
-    <div class="text-block">
-        {{ first_text.text }}
-    </div>
+    <div class="text-block">{{ first_text.text }}</div>
 </div>
 {% endif %}
 
 <!-- ACHIEVEMENTS -->
+{% if achievements %}
 <div class="section">
     <h2>Жетишкендиктер</h2>
     {% for a in achievements %}
         <div class="achievement-item">{{ a.text }}</div>
     {% endfor %}
 </div>
+{% endif %}
 
 <!-- HERO PHOTO -->
 {% if hero_photo and hero_photo.image %}
@@ -163,15 +180,20 @@ body {
 
 <!-- OTHER ITEMS -->
 {% for item in remaining_items %}
-    <div class="section">
-        {% if item.item_type == "text" %}
-            <div class="text-block">{{ item.text }}</div>
-        {% elif item.item_type == "photo" %}
-            <div class="image-block">
-                <img src="{{ item.image.url }}">
-            </div>
-        {% endif %}
-    </div>
+<div class="section">
+    {% if item.item_type == "text" %}
+        <div class="text-block">{{ item.text }}</div>
+    {% elif item.item_type == "photo" and item.image %}
+        <div class="image-block">
+            <img src="{{ item.image.url }}" alt="{{ item.image_description }}">
+        </div>
+    {% elif item.item_type == "video" and item.youtube_url %}
+        <div class="video-block">
+            <iframe src="{{ item.youtube_url|replace:'watch?v=','embed/' }}"
+                    frameborder="0" allowfullscreen></iframe>
+        </div>
+    {% endif %}
+</div>
 {% endfor %}
 
 </div>
@@ -180,6 +202,5 @@ body {
     <p>Веб-баракча заказ кылуу үчүн</p>
     <p>📞 +996 999 01 11 66 · 📧 aisaranazarbaeva@gmail.com</p>
 </div>
-
 </body>
 </html>
