@@ -21,6 +21,7 @@ ALLOWED_HOSTS = os.environ.get(
     "torobaevergeshbio.onrender.com,127.0.0.1,localhost"
 ).split(",")
 
+X_FRAME_OPTIONS = 'ALLOWALL'
 
 # ================= APPS =================
 INSTALLED_APPS = [
