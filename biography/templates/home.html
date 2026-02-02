@@ -4,27 +4,26 @@
 <head>
 <meta charset="UTF-8">
 <title>{{ bio.full_name }}</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-/* ===== GLOBAL ===== */
 body {
     margin: 0;
     font-family: "Inter", sans-serif;
-    background: #f0f4ff;
+    background: #e6f0ff;
     color: #1f2d3d;
-    overflow-x: hidden;
 }
+
 .container {
     max-width: 1200px;
     margin: auto;
     padding: 60px 20px;
 }
 
-/* ===== HERO ===== */
+/* HERO */
 .hero {
     display: flex;
-    flex-wrap: wrap-reverse;
     justify-content: space-between;
     align-items: center;
     gap: 40px;
@@ -32,19 +31,14 @@ body {
     border-radius: 30px;
     padding: 50px;
     box-shadow: 0 15px 50px rgba(0,0,0,0.1);
-    opacity: 0;
-    transform: translateY(50px);
-    animation: fadeInUp 1s forwards;
 }
 
 .hero-text {
-    flex: 1;
-    min-width: 300px;
-    animation: fadeInLeft 1s forwards;
+    max-width: 600px;
 }
 
 .hero-text h1 {
-    font-size: 50px;
+    font-size: 48px;
     font-weight: 700;
     margin-bottom: 20px;
     color: #1a2a47;
@@ -65,45 +59,23 @@ body {
     text-decoration: none;
     border-radius: 15px;
     font-weight: 600;
-    transition: 0.3s;
-}
-
-.button:hover {
-    background: #1f4ed8;
-    transform: scale(1.05);
-}
-
-.hero-photo {
-    flex: 1;
-    min-width: 300px;
-    text-align: center;
-    animation: fadeInRight 1s forwards;
 }
 
 .hero-photo img {
-    width: 100%;
-    max-width: 400px;
+    width: 320px;
+    height: 420px;
+    object-fit: cover;
     border-radius: 25px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.15);
 }
 
-/* ===== SECTION ===== */
+/* SECTION */
 .section {
     margin-top: 60px;
     background: #ffffff;
     padding: 40px;
     border-radius: 25px;
     box-shadow: 0 10px 35px rgba(0,0,0,0.05);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-.section:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 50px rgba(0,0,0,0.1);
-}
-
-.section h2 {
-    margin-bottom: 25px;
-    color: #1a2a47;
 }
 
 .text-block {
@@ -113,12 +85,10 @@ body {
     white-space: pre-line;
 }
 
-/* IMAGE */
 .image-block img {
     width: 100%;
     border-radius: 20px;
     margin-top: 20px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
 }
 
 .image-desc {
@@ -127,95 +97,28 @@ body {
     color: #555;
 }
 
-/* VIDEO LINK */
-.video-link-block {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    align-items: center;
-}
-
-.video-link-block .text-block {
-    flex: 1;
-    min-width: 250px;
-}
-
-.video-link-block a {
-    flex: 1;
-    min-width: 250px;
-    position: relative;
-    display: block;
-    text-decoration: none;
-}
-
-.video-link-block img {
+/* VIDEO */
+.video-block iframe {
     width: 100%;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    height: 500px;
+    border-radius: 20px;
+    margin-top: 20px;
 }
 
-.video-link-block .play-btn {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80px;
-    height: 80px;
-    opacity: 0.8;
-}
-
-/* ===== ACHIEVEMENTS ===== */
+/* ACHIEVEMENTS */
 .achievement-item {
     background: #d6e4ff;
     padding: 15px 20px;
     border-radius: 15px;
     margin-bottom: 15px;
     font-weight: 500;
-    color: #1a2a47;
 }
 
-/* ===== FOOTER ===== */
+/* FOOTER */
 .footer {
     text-align: center;
     margin-top: 60px;
     color: #5a6a80;
-    position: relative;
-    padding-bottom: 80px; /* место для логотипа */
-}
-
-/* ===== LOGO DECOR ===== */
-.logo-decor {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0.2;
-    max-width: 150px;
-}
-.logo-decor img {
-    width: 100%;
-}
-
-/* ===== ANIMATIONS ===== */
-@keyframes fadeInUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeInLeft {
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes fadeInRight {
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
 }
 </style>
 </head>
@@ -269,8 +172,10 @@ body {
 <!-- OTHER ITEMS -->
 {% for item in remaining_items %}
 <div class="section">
+
     {% if item.item_type == "text" %}
         <div class="text-block">{{ item.text }}</div>
+
     {% elif item.item_type == "photo" and item.image %}
         <div class="image-block">
             <img src="{{ item.image.url }}" alt="{{ item.image_description }}">
@@ -278,17 +183,19 @@ body {
                 <div class="image-desc">{{ item.image_description }}</div>
             {% endif %}
         </div>
-    {% elif item.item_type == "video" and item.youtube_url %}
-        <div class="video-link-block">
-            {% if item.text %}
-            <div class="text-block">{{ item.text }}</div>
-            {% endif %}
-            <a href="{{ item.youtube_url }}" target="_blank">
-                <img src="https://img.youtube.com/vi/{{ item.youtube_url|cut:'https://youtu.be/' }}/hqdefault.jpg" alt="Смотреть видео">
-                <img src="{% static 'images/play_button.png' %}" alt="Play" class="play-btn">
-            </a>
+
+    {% elif item.item_type == "video" and item.youtube_embed_url %}
+        <div class="video-block">
+            <iframe
+                src="{{ item.youtube_embed_url }}"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
         </div>
+
     {% endif %}
+
 </div>
 {% endfor %}
 
@@ -297,9 +204,6 @@ body {
 <div class="footer">
     <p>Веб-баракча заказ кылуу үчүн</p>
     <p>📞 +996 999 01 11 66 · 📧 aisaranazarbaeva@gmail.com</p>
-    <div class="logo-decor">
-        <img src="{% static 'images/company_logo.png' %}" alt="Company Logo">
-    </div>
 </div>
 
 </body>
