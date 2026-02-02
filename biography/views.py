@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import Bio, BioItem
 
+
 def home(request):
     bio = Bio.objects.first()
 
@@ -14,29 +15,31 @@ def home(request):
     remaining_items = []
 
     for item in items:
-
-        # Формируем embed ссылку для видео
-        if item.item_type == 'video' and item.youtube_url:
-            if "youtu.be/" in item.youtube_url:
-                item.youtube_embed_url = item.youtube_url.replace(
-                    "https://youtu.be/", "https://www.youtube.com/embed/"
-                )
-            elif "watch?v=" in item.youtube_url:
-                item.youtube_embed_url = item.youtube_url.replace(
-                    "watch?v=", "embed/"
-                )
-            else:
-                item.youtube_embed_url = item.youtube_url
-
-        # Главное фото
         if item.item_type == 'photo' and not hero_photo:
             hero_photo = item
 
-        # Первый текст
         elif item.item_type == 'text' and not first_text:
             first_text = item
 
         else:
+            # ✅ обработка YouTube ссылок
+            if item.item_type == 'video' and item.youtube_url:
+                url = item.youtube_url.strip()
+
+                if "watch?v=" in url:
+                    video_id = url.split("watch?v=")[1].split("&")[0]
+
+                elif "youtu.be/" in url:
+                    video_id = url.split("youtu.be/")[1].split("?")[0]
+
+                else:
+                    video_id = None
+
+                if video_id:
+                    item.youtube_embed_url = f"https://www.youtube.com/embed/{video_id}"
+                else:
+                    item.youtube_embed_url = None
+
             remaining_items.append(item)
 
     achievement_texts = [
