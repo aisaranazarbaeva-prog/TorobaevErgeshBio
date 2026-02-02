@@ -4,18 +4,143 @@
 <head>
 <meta charset="UTF-8">
 <title>{{ bio.full_name }}</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
 <style>
-/* Простейший стиль для видео */
+/* ===== GLOBAL ===== */
+body {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    background: #e6f0ff;
+    color: #1f2d3d;
+}
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 60px 20px;
+}
+
+/* ===== HERO ===== */
+.hero {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    background: linear-gradient(135deg, #cce0ff, #e6f0ff);
+    border-radius: 30px;
+    padding: 50px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+}
+.hero-text {
+    max-width: 600px;
+}
+.hero-text h1 {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #1a2a47;
+}
+.hero-text p {
+    font-size: 20px;
+    line-height: 1.6;
+    color: #3a4d6a;
+}
+.button {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 14px 32px;
+    background: #2f6bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 15px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+.button:hover {
+    background: #1f4ed8;
+}
+.hero-photo img {
+    width: 320px;
+    height: 420px;
+    object-fit: cover;
+    border-radius: 25px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+/* ===== SECTION ===== */
+.section {
+    margin-top: 60px;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 25px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+}
+.section h2 {
+    margin-bottom: 25px;
+    color: #1a2a47;
+}
+.text-block {
+    font-size: 17px;
+    line-height: 1.8;
+    white-space: pre-line;
+    color: #3a4d6a;
+}
+.image-block img {
+    width: 100%;
+    border-radius: 20px;
+    margin-top: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+}
 .video-block iframe {
     width: 100%;
-    max-width: 980px;
-    height: 551px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    height: 500px;
+    border-radius: 20px;
     margin-top: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+}
+.video-block a {
+    color: #2f6bff;
+    font-weight: 600;
+    text-decoration: none;
+}
+.video-block a:hover {
+    text-decoration: underline;
+}
+
+/* ===== ACHIEVEMENTS ===== */
+.achievement-item {
+    background: #d6e4ff;
+    padding: 15px 20px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    font-weight: 500;
+    color: #1a2a47;
+    transition: 0.3s;
+}
+.achievement-item:hover {
+    background: #b3cfff;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    text-align: center;
+    margin-top: 60px;
+    color: #5a6a80;
+    font-size: 15px;
+}
+.footer p {
+    margin: 5px 0;
 }
 </style>
 </head>
+
 <body>
 <div class="container">
 
@@ -26,17 +151,18 @@
         {% if bio.quote %}
         <p><em>{{ bio.quote }}</em></p>
         {% endif %}
+        <a href="#about" class="button">Сүрөттөмө</a>
     </div>
     <div class="hero-photo">
-        {% if hero_photo and hero_photo.image %}
-        <img src="{{ hero_photo.image.url }}" alt="{{ hero_photo.image_description }}">
+        {% if bio.main_photo %}
+        <img src="{{ bio.main_photo.url }}" alt="Photo">
         {% endif %}
     </div>
 </div>
 
 <!-- FIRST TEXT -->
 {% if first_text %}
-<div class="section">
+<div id="about" class="section">
     <div class="text-block">{{ first_text.text }}</div>
 </div>
 {% endif %}
@@ -51,25 +177,42 @@
 </div>
 {% endif %}
 
+<!-- HERO PHOTO -->
+{% if hero_photo and hero_photo.image %}
+<div class="section">
+    <div class="image-block">
+        <img src="{{ hero_photo.image.url }}" alt="Hero photo">
+    </div>
+</div>
+{% endif %}
+
 <!-- OTHER ITEMS -->
 {% for item in remaining_items %}
 <div class="section">
     {% if item.item_type == "text" %}
         <div class="text-block">{{ item.text }}</div>
-
     {% elif item.item_type == "photo" and item.image %}
         <div class="image-block">
             <img src="{{ item.image.url }}" alt="{{ item.image_description }}">
         </div>
-
-    {% elif item.item_type == "video" and item.youtube_embed_url %}
+    {% elif item.item_type == "video" %}
         <div class="video-block">
-            {{ item.youtube_embed_url|safe }}
+            {% if item.youtube_embed_url %}
+                <iframe src="{{ item.youtube_embed_url }}" frameborder="0" allowfullscreen></iframe>
+            {% else %}
+                <!-- Если embed URL не сработал — показываем ссылку -->
+                <a href="{{ item.youtube_url }}" target="_blank">Посмотреть видео на YouTube</a>
+            {% endif %}
         </div>
     {% endif %}
 </div>
 {% endfor %}
 
+</div>
+
+<div class="footer">
+    <p>Веб-баракча заказ кылуу үчүн</p>
+    <p>📞 +996 999 01 11 66 · 📧 aisaranazarbaeva@gmail.com</p>
 </div>
 </body>
 </html>
