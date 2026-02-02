@@ -11,7 +11,7 @@
 body {
     margin: 0;
     font-family: "Inter", sans-serif;
-    background: linear-gradient(180deg,#eaf2ff,#f7fbff);
+    background: #e6f0ff;
     color: #1f2d3d;
 }
 
@@ -27,10 +27,10 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 40px;
-    background: linear-gradient(135deg,#dbe9ff,#f3f8ff);
+    background: linear-gradient(135deg, #cce0ff, #e6f0ff);
     border-radius: 30px;
     padding: 50px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.1);
 }
 
 .hero-text {
@@ -38,106 +38,86 @@ body {
 }
 
 .hero-text h1 {
-    font-size: 46px;
+    font-size: 48px;
+    font-weight: 700;
     margin-bottom: 20px;
-    color: #102a54;
+    color: #1a2a47;
 }
 
 .hero-text p {
     font-size: 20px;
-    line-height: 1.7;
-    color: #3a4f7a;
+    line-height: 1.6;
+    color: #3a4d6a;
 }
 
 .button {
     display: inline-block;
     margin-top: 25px;
-    padding: 14px 36px;
-    background: linear-gradient(135deg,#2f6bff,#4f8cff);
+    padding: 14px 32px;
+    background: #2f6bff;
     color: #fff;
     text-decoration: none;
-    border-radius: 16px;
+    border-radius: 15px;
     font-weight: 600;
-    transition: 0.3s;
-}
-
-.button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(47,107,255,0.4);
 }
 
 .hero-photo img {
-    width: 330px;
-    height: 440px;
+    width: 320px;
+    height: 420px;
     object-fit: cover;
-    border-radius: 28px;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+    border-radius: 25px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
 }
 
 /* SECTION */
 .section {
     margin-top: 60px;
-    background: white;
-    padding: 45px;
-    border-radius: 28px;
-    box-shadow: 0 12px 35px rgba(0,0,0,0.05);
-    transition: 0.3s;
-}
-
-.section:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 18px 45px rgba(0,0,0,0.08);
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 25px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.05);
 }
 
 .text-block {
-    font-size: 18px;
-    line-height: 1.9;
-    color: #324d7a;
+    font-size: 17px;
+    line-height: 1.8;
+    color: #3a4d6a;
+    white-space: pre-line;
 }
 
-/* IMAGE */
 .image-block img {
     width: 100%;
-    border-radius: 22px;
-    margin-top: 15px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+    border-radius: 20px;
+    margin-top: 20px;
 }
 
 .image-desc {
     margin-top: 10px;
-    font-size: 15px;
-    color: #4a6391;
-    text-align: center;
+    font-size: 14px;
+    color: #555;
 }
 
 /* VIDEO */
 .video-block iframe {
     width: 100%;
-    height: 480px;
-    border-radius: 22px;
-    margin-top: 15px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+    height: 500px;
+    border-radius: 20px;
+    margin-top: 20px;
 }
 
 /* ACHIEVEMENTS */
 .achievement-item {
-    background: linear-gradient(135deg,#e1ecff,#f2f6ff);
-    padding: 16px 22px;
-    border-radius: 16px;
-    margin-bottom: 14px;
+    background: #d6e4ff;
+    padding: 15px 20px;
+    border-radius: 15px;
+    margin-bottom: 15px;
     font-weight: 500;
-    color: #203a70;
-    transition: 0.3s;
-}
-
-.achievement-item:hover {
-    background: #cfe0ff;
 }
 
 /* FOOTER */
 .footer {
     text-align: center;
-    margin-top: 70px;
+    margin-top: 60px;
     color: #5a6a80;
 }
 </style>
@@ -150,17 +130,15 @@ body {
 <div class="hero">
     <div class="hero-text">
         <h1>{{ bio.full_name }}</h1>
-
         {% if bio.quote %}
-        <p><em>{{ bio.quote }}</em></p>
+            <p><em>{{ bio.quote }}</em></p>
         {% endif %}
-
         <a href="#about" class="button">Сүрөттөмө</a>
     </div>
 
     <div class="hero-photo">
         {% if bio.main_photo %}
-        <img src="{{ bio.main_photo.url }}" alt="Photo">
+            <img src="{{ bio.main_photo.url }}" alt="Photo">
         {% endif %}
     </div>
 </div>
@@ -186,10 +164,7 @@ body {
 {% if hero_photo and hero_photo.image %}
 <div class="section">
     <div class="image-block">
-        <img src="{{ hero_photo.image.url }}" alt="{{ hero_photo.image_description }}">
-        {% if hero_photo.image_description %}
-            <div class="image-desc">{{ hero_photo.image_description }}</div>
-        {% endif %}
+        <img src="{{ hero_photo.image.url }}" alt="Hero photo">
     </div>
 </div>
 {% endif %}
@@ -197,6 +172,7 @@ body {
 <!-- OTHER ITEMS -->
 {% for item in remaining_items %}
 <div class="section">
+
     {% if item.item_type == "text" %}
         <div class="text-block">{{ item.text }}</div>
 
@@ -208,17 +184,20 @@ body {
             {% endif %}
         </div>
 
-   {% elif item.item_type == "video" and item.youtube_embed_url %}
-<div class="video-block">
-    <iframe
-        src="{{ item.youtube_embed_url }}"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
-    </iframe>
-</div>
-{% endif %}
+    {% elif item.item_type == "video" and item.youtube_embed_url %}
+        <div class="video-block">
+            <iframe
+                src="{{ item.youtube_embed_url }}"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
 
+    {% endif %}
+
+</div>
+{% endfor %}
 
 </div>
 
