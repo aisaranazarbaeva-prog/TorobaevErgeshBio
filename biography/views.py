@@ -2,6 +2,29 @@ from django.shortcuts import render
 from .models import Bio, BioItem
 
 
+def get_youtube_embed_url(url):
+    """
+    Преобразует обычную ссылку YouTube в embed-ссылку
+    """
+    if not url:
+        return None
+
+    url = url.strip()
+    video_id = None
+
+    if "watch?v=" in url:
+        video_id = url.split("watch?v=")[1].split("&")[0]
+    elif "youtu.be/" in url:
+        video_id = url.split("youtu.be/")[1].split("?")[0]
+    elif "youtube.com/embed/" in url:
+        video_id = url.split("embed/")[1].split("?")[0]
+
+    if video_id:
+        return f"https://www.youtube.com/embed/{video_id}"
+
+    return None
+
+
 def home(request):
     bio = Bio.objects.first()
 
@@ -15,28 +38,24 @@ def home(request):
     remaining_items = []
 
     for item in items:
-        if item.item_type == 'photo' and not hero_photo:
-            hero_photo = item
-
-        elif item.item_type == 'text' and not first_text:
+        # Первый текст
+        if item.item_type == 'text' and not first_text:
             first_text = item
 
+        # Главное фото
+        elif item.item_type == 'photo' and not hero_photo:
+            hero_photo = item
+
         else:
-            # Обработка YouTube ссылок
+            # Видео
             if item.item_type == 'video' and item.youtube_url:
-                url = item.youtube_url.strip()
-
-                video_id = None
-                if "watch?v=" in url:
-                    video_id = url.split("watch?v=")[1].split("&")[0]
-                elif "youtu.be/" in url:
-                    video_id = url.split("youtu.be/")[1].split("?")[0]
-
-                item.youtube_embed_url = f"https://www.youtube.com/embed/{video_id}"
+                item.youtube_embed_url = get_youtube_embed_url(item.youtube_url)
+            else:
+                item.youtube_embed_url = None
 
             remaining_items.append(item)
 
-    # Достижения
+    # Достижения (статично)
     achievement_texts = [
         "1971 жана 1979-жылдары Кыргыз ССРинин Жогорку Кеңешинин “Ардак Грамотасы” менен сыйланган.",
         "1980-жылы “КЫРГЫЗ ССРинин ЭМГЕК СИҢИРГЕН ЭНЕРГЕТИГИ” наамы берилген.",
@@ -55,6 +74,7 @@ def home(request):
         "2012-жылы көмөк чордонго аты берилген.",
         "2025-жылы Жалал-Абад облусунун ардактуу атуулу."
     ]
+
     achievements = [{"text": a} for a in achievement_texts]
 
     return render(request, "home.html", {
@@ -62,5 +82,5 @@ def home(request):
         "hero_photo": hero_photo,
         "first_text": first_text,
         "remaining_items": remaining_items,
-        "achievements": achievements
+        "achievements": achievements,
     })
