@@ -1,10 +1,9 @@
-\{% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <title>{{ bio.full_name }}</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -12,8 +11,9 @@
 body {
     margin: 0;
     font-family: "Inter", sans-serif;
-    background: #e6f0ff;
+    background: #f0f4ff;
     color: #1f2d3d;
+    overflow-x: hidden;
 }
 .container {
     max-width: 1200px;
@@ -24,7 +24,7 @@ body {
 /* ===== HERO ===== */
 .hero {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: wrap-reverse;
     justify-content: space-between;
     align-items: center;
     gap: 40px;
@@ -32,21 +32,30 @@ body {
     border-radius: 30px;
     padding: 50px;
     box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+    opacity: 0;
+    transform: translateY(50px);
+    animation: fadeInUp 1s forwards;
 }
+
 .hero-text {
-    max-width: 600px;
+    flex: 1;
+    min-width: 300px;
+    animation: fadeInLeft 1s forwards;
 }
+
 .hero-text h1 {
-    font-size: 48px;
+    font-size: 50px;
     font-weight: 700;
     margin-bottom: 20px;
     color: #1a2a47;
 }
+
 .hero-text p {
     font-size: 20px;
     line-height: 1.6;
     color: #3a4d6a;
 }
+
 .button {
     display: inline-block;
     margin-top: 25px;
@@ -58,13 +67,22 @@ body {
     font-weight: 600;
     transition: 0.3s;
 }
+
 .button:hover {
     background: #1f4ed8;
+    transform: scale(1.05);
 }
+
+.hero-photo {
+    flex: 1;
+    min-width: 300px;
+    text-align: center;
+    animation: fadeInRight 1s forwards;
+}
+
 .hero-photo img {
-    width: 320px;
-    height: 420px;
-    object-fit: cover;
+    width: 100%;
+    max-width: 400px;
     border-radius: 25px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.15);
 }
@@ -82,28 +100,68 @@ body {
     transform: translateY(-5px);
     box-shadow: 0 15px 50px rgba(0,0,0,0.1);
 }
+
 .section h2 {
     margin-bottom: 25px;
     color: #1a2a47;
 }
+
 .text-block {
     font-size: 17px;
     line-height: 1.8;
-    white-space: pre-line;
     color: #3a4d6a;
+    white-space: pre-line;
 }
+
+/* IMAGE */
 .image-block img {
     width: 100%;
     border-radius: 20px;
     margin-top: 20px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.12);
 }
-.video-block iframe {
+
+.image-desc {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* VIDEO LINK */
+.video-link-block {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    align-items: center;
+}
+
+.video-link-block .text-block {
+    flex: 1;
+    min-width: 250px;
+}
+
+.video-link-block a {
+    flex: 1;
+    min-width: 250px;
+    position: relative;
+    display: block;
+    text-decoration: none;
+}
+
+.video-link-block img {
     width: 100%;
-    height: 500px;
-    border-radius: 20px;
-    margin-top: 20px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.video-link-block .play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    opacity: 0.8;
 }
 
 /* ===== ACHIEVEMENTS ===== */
@@ -114,10 +172,6 @@ body {
     margin-bottom: 15px;
     font-weight: 500;
     color: #1a2a47;
-    transition: 0.3s;
-}
-.achievement-item:hover {
-    background: #b3cfff;
 }
 
 /* ===== FOOTER ===== */
@@ -125,10 +179,43 @@ body {
     text-align: center;
     margin-top: 60px;
     color: #5a6a80;
-    font-size: 15px;
+    position: relative;
+    padding-bottom: 80px; /* место для логотипа */
 }
-.footer p {
-    margin: 5px 0;
+
+/* ===== LOGO DECOR ===== */
+.logo-decor {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.2;
+    max-width: 150px;
+}
+.logo-decor img {
+    width: 100%;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 </style>
 </head>
@@ -141,13 +228,14 @@ body {
     <div class="hero-text">
         <h1>{{ bio.full_name }}</h1>
         {% if bio.quote %}
-        <p><em>{{ bio.quote }}</em></p>
+            <p><em>{{ bio.quote }}</em></p>
         {% endif %}
         <a href="#about" class="button">Сүрөттөмө</a>
     </div>
+
     <div class="hero-photo">
         {% if bio.main_photo %}
-        <img src="{{ bio.main_photo.url }}" alt="Photo">
+            <img src="{{ bio.main_photo.url }}" alt="Photo">
         {% endif %}
     </div>
 </div>
@@ -186,10 +274,19 @@ body {
     {% elif item.item_type == "photo" and item.image %}
         <div class="image-block">
             <img src="{{ item.image.url }}" alt="{{ item.image_description }}">
+            {% if item.image_description %}
+                <div class="image-desc">{{ item.image_description }}</div>
+            {% endif %}
         </div>
-    {% elif item.item_type == "video" and item.youtube_embed_url %}
-        <div class="video-block">
-            <iframe src="{{ item.youtube_embed_url }}" frameborder="0" allowfullscreen></iframe>
+    {% elif item.item_type == "video" and item.youtube_url %}
+        <div class="video-link-block">
+            {% if item.text %}
+            <div class="text-block">{{ item.text }}</div>
+            {% endif %}
+            <a href="{{ item.youtube_url }}" target="_blank">
+                <img src="https://img.youtube.com/vi/{{ item.youtube_url|cut:'https://youtu.be/' }}/hqdefault.jpg" alt="Смотреть видео">
+                <img src="{% static 'images/play_button.png' %}" alt="Play" class="play-btn">
+            </a>
         </div>
     {% endif %}
 </div>
@@ -200,6 +297,10 @@ body {
 <div class="footer">
     <p>Веб-баракча заказ кылуу үчүн</p>
     <p>📞 +996 999 01 11 66 · 📧 aisaranazarbaeva@gmail.com</p>
+    <div class="logo-decor">
+        <img src="{% static 'images/company_logo.png' %}" alt="Company Logo">
+    </div>
 </div>
+
 </body>
 </html>
