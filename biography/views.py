@@ -32,15 +32,7 @@ def home(request):
                 elif "youtu.be/" in url:
                     video_id = url.split("youtu.be/")[1].split("?")[0]
 
-                if video_id:
-                    item.youtube_embed_url = f"""
-                    <iframe width="980" height="551" 
-                    src="https://www.youtube.com/embed/{video_id}" 
-                    title="Видео" frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    allowfullscreen></iframe>"""
-                else:
-                    item.youtube_embed_url = None
+                item.youtube_embed_url = f"https://www.youtube.com/embed/{video_id}"
 
             remaining_items.append(item)
 
