@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from .models import Bio, BioItem
 
-
 def home(request):
     bio = Bio.objects.first()
 
@@ -15,33 +14,39 @@ def home(request):
     remaining_items = []
 
     for item in items:
+        # Находим главное фото
         if item.item_type == 'photo' and not hero_photo:
             hero_photo = item
 
+        # Находим первый текст
         elif item.item_type == 'text' and not first_text:
             first_text = item
 
         else:
-            # ✅ обработка YouTube ссылок
+            # Обработка видео (YouTube)
             if item.item_type == 'video' and item.youtube_url:
                 url = item.youtube_url.strip()
+                video_id = None
 
+                # youtube.com/watch?v=
                 if "watch?v=" in url:
                     video_id = url.split("watch?v=")[1].split("&")[0]
 
+                # youtu.be/короткая ссылка
                 elif "youtu.be/" in url:
                     video_id = url.split("youtu.be/")[1].split("?")[0]
 
-                else:
-                    video_id = None
-
+                # Если видео ID найден, формируем embed
                 if video_id:
                     item.youtube_embed_url = f"https://www.youtube.com/embed/{video_id}"
                 else:
                     item.youtube_embed_url = None
+            else:
+                item.youtube_embed_url = None
 
             remaining_items.append(item)
 
+    # Список достижений
     achievement_texts = [
         "1971 жана 1979-жылдары Кыргыз ССРинин Жогорку Кеңешинин “Ардак Грамотасы” менен сыйланган.",
         "1980-жылы “КЫРГЫЗ ССРинин ЭМГЕК СИҢИРГЕН ЭНЕРГЕТИГИ” наамы берилген.",
@@ -60,7 +65,6 @@ def home(request):
         "2012-жылы көмөк чордонго аты берилген.",
         "2025-жылы Жалал-Абад облусунун ардактуу атуулу."
     ]
-
     achievements = [{"text": a} for a in achievement_texts]
 
     return render(request, "home.html", {
