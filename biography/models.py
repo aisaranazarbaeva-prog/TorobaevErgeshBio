@@ -15,7 +15,7 @@ class BioItem(models.Model):
     ITEM_TYPES = (
         ('text', 'Text'),
         ('photo', 'Photo'),
-        ('video', 'Video'),
+        ('video', 'Video'),  # добавили тип для YouTube
     )
 
     bio = models.ForeignKey(Bio, related_name='items', on_delete=models.CASCADE)
@@ -24,9 +24,9 @@ class BioItem(models.Model):
     text = models.TextField(blank=True, null=True)
 
     image = CloudinaryField('image', blank=True, null=True)
-    image_description = models.TextField(blank=True, null=True)
+    image_description = models.TextField(blank=True, null=True)  # описание фото ✅
 
-    youtube_url = models.URLField(blank=True, null=True)
+    youtube_url = models.URLField(blank=True, null=True)  # ссылка на YouTube видео ✅
 
     def __str__(self):
         return f"{self.bio.full_name} - {self.item_type}"

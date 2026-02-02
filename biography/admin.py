@@ -1,37 +1,27 @@
 from django.contrib import admin
 from .models import Bio, BioItem
-from django.utils.html import format_html
 
-
-class BioItemInline(admin.StackedInline):
+# Inline для BioItem, чтобы редактировать элементы прямо в Bio
+class BioItemInline(admin.TabularInline):  # Можно использовать StackedInline для вертикального вида
     model = BioItem
-    extra = 1
-    fields = ('item_type', 'text', 'image', 'image_description', 'youtube_url', 'image_preview')
-    readonly_fields = ('image_preview',)
-
-    def image_preview(self, obj):
-        if obj.image:
-            return format_html(
-                '<img src="{}" width="200" style="border-radius:12px;"/>',
-                obj.image.url
-            )
-        return "Нет фото"
-
-    image_preview.short_description = "Превью фото"
-
+    extra = 1  # сколько пустых форм добавлять
+    fields = ('item_type', 'text', 'image', 'image_description', 'youtube_url')
+    readonly_fields = ()
+    # Можно добавить фильтр по типу
+    show_change_link = True
 
 @admin.register(Bio)
 class BioAdmin(admin.ModelAdmin):
-    list_display = ('full_name',)
-    inlines = [BioItemInline]
-    readonly_fields = ('main_photo_preview',)
+    list_display = ('full_name', 'quote')  # поля для отображения в списке
+    search_fields = ('full_name',)  # поиск по имени
+    inlines = [BioItemInline]  # добавляем BioItem прямо в Bio
+    list_per_page = 20  # сколько элементов на странице
+    # Если нужны кастомные поля в форме
+    # fields = ('full_name', 'main_photo', 'quote')
 
-    def main_photo_preview(self, obj):
-        if obj.main_photo:
-            return format_html(
-                '<img src="{}" width="300" style="border-radius:15px;"/>',
-                obj.main_photo.url
-            )
-        return "Нет фото"
-
-    main_photo_preview.short_description = "Превью главного фото"
+@admin.register(BioItem)
+class BioItemAdmin(admin.ModelAdmin):
+    list_display = ('bio', 'item_type', 'text', 'youtube_url')
+    list_filter = ('item_type',)
+    search_fields = ('bio__full_name', 'text', 'image_description', 'youtube_url')
+    list_per_page = 20
