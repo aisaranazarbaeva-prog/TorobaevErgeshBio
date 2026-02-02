@@ -14,21 +14,30 @@ def home(request):
     remaining_items = []
 
     for item in items:
-        # Находим главное фото
+
+        # Формируем embed ссылку для видео
+        if item.item_type == 'video' and item.youtube_url:
+            if "youtu.be/" in item.youtube_url:
+                item.youtube_embed_url = item.youtube_url.replace(
+                    "https://youtu.be/", "https://www.youtube.com/embed/"
+                )
+            elif "watch?v=" in item.youtube_url:
+                item.youtube_embed_url = item.youtube_url.replace(
+                    "watch?v=", "embed/"
+                )
+            else:
+                item.youtube_embed_url = item.youtube_url
+
+        # Главное фото
         if item.item_type == 'photo' and not hero_photo:
             hero_photo = item
-        # Находим первый текст
+
+        # Первый текст
         elif item.item_type == 'text' and not first_text:
             first_text = item
+
         else:
-            # Для видео сразу формируем embed_url
-            if "watch?v=" in item.youtube_url:
-                item.youtube_embed_url = item.youtube_url.replace("watch?v=", "embed/")
-            else:
-                # Если короткая ссылка youtu.be
-                if "youtu.be/" in item.youtube_url:
-                    video_id = item.youtube_url.split("/")[-1]
-                    item.youtube_embed_url = f"https://www.youtube.com/embed/{video_id}"
+            remaining_items.append(item)
 
     achievement_texts = [
         "1971 жана 1979-жылдары Кыргыз ССРинин Жогорку Кеңешинин “Ардак Грамотасы” менен сыйланган.",
