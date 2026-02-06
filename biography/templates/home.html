@@ -15,15 +15,17 @@ body {
     color: #1f2d3d;
 }
 
+/* Container */
 .container {
     max-width: 1200px;
     margin: auto;
-    padding: 60px 20px;
+    padding: 40px 20px;
 }
 
 /* HERO */
 .hero {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     gap: 40px;
@@ -34,7 +36,8 @@ body {
 }
 
 .hero-text {
-    max-width: 600px;
+    flex: 1;
+    min-width: 300px;
 }
 
 .hero-text h1 {
@@ -59,14 +62,27 @@ body {
     text-decoration: none;
     border-radius: 15px;
     font-weight: 600;
+    transition: 0.3s;
+}
+
+.button:hover {
+    background: #1a4cff;
+}
+
+/* HERO PHOTO */
+.hero-photo {
+    flex: 1;
+    min-width: 300px;
+    text-align: center;
 }
 
 .hero-photo img {
-    width: 320px;
-    height: 420px;
-    object-fit: cover;
+    width: 100%;
+    max-width: 320px;
+    height: auto;
     border-radius: 25px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    object-fit: cover;
 }
 
 /* SECTION */
@@ -76,8 +92,10 @@ body {
     padding: 40px;
     border-radius: 25px;
     box-shadow: 0 10px 35px rgba(0,0,0,0.05);
+    overflow: hidden;
 }
 
+/* Text Block */
 .text-block {
     font-size: 17px;
     line-height: 1.8;
@@ -85,10 +103,17 @@ body {
     white-space: pre-line;
 }
 
+/* Image Block */
+.image-block {
+    text-align: center;
+}
+
 .image-block img {
     width: 100%;
+    max-width: 600px;
     border-radius: 20px;
     margin-top: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
 .image-desc {
@@ -97,15 +122,33 @@ body {
     color: #555;
 }
 
-/* VIDEO */
-.video-block iframe {
+/* Video Block */
+.video-block {
+    position: relative;
     width: 100%;
-    height: 500px;
+    max-width: 600px;
+    margin: 20px auto;
     border-radius: 20px;
-    margin-top: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-/* ACHIEVEMENTS */
+.video-block::before {
+    content: "";
+    display: block;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+}
+
+.video-block iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* Achievements */
 .achievement-item {
     background: #d6e4ff;
     padding: 15px 20px;
@@ -114,11 +157,22 @@ body {
     font-weight: 500;
 }
 
-/* FOOTER */
+/* Footer */
 .footer {
     text-align: center;
     margin-top: 60px;
     color: #5a6a80;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+    }
+    .hero-text, .hero-photo {
+        max-width: 100%;
+    }
 }
 </style>
 </head>
@@ -135,7 +189,6 @@ body {
         {% endif %}
         <a href="#about" class="button">Сүрөттөмө</a>
     </div>
-
     <div class="hero-photo">
         {% if bio.main_photo %}
             <img src="{{ bio.main_photo.url }}" alt="Photo">
@@ -172,7 +225,6 @@ body {
 <!-- OTHER ITEMS -->
 {% for item in remaining_items %}
 <div class="section">
-
     {% if item.item_type == "text" %}
         <div class="text-block">{{ item.text }}</div>
 
@@ -185,28 +237,19 @@ body {
         </div>
 
     {% elif item.item_type == "video" and item.youtube_url %}
-<div class="video-block">
-    <iframe
-        src="{{ item.youtube_embed_url|safe }}"
-        width="100%"
-        height="500"
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen>
-    </iframe>
-</div>
-{% endif %}
-
-
-
+        <div class="video-block">
+            <iframe
+                src="{{ item.youtube_embed_url|safe }}"
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+            </iframe>
+        </div>
     {% endif %}
-
 </div>
 {% endfor %}
 
-</div>
-
+<!-- FOOTER -->
 <div class="footer">
     <p>Веб-баракча заказ кылуу үчүн</p>
     <p>📞 +996 999 01 11 66 · 📧 aisaranazarbaeva@gmail.com</p>
