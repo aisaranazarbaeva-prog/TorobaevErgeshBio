@@ -1,23 +1,28 @@
 from django.contrib import admin
-from .models import Bio, BioItem
+from .models import Bio, BioItem, GalleryPhoto, SocialLink
 
-# Inline для BioItem, чтобы редактировать элементы прямо в Bio
-class BioItemInline(admin.TabularInline):  # Можно использовать StackedInline для вертикального вида
+class BioItemInline(admin.TabularInline):
     model = BioItem
-    extra = 1  # сколько пустых форм добавлять
+    extra = 1
     fields = ('item_type', 'text', 'image', 'image_description', 'youtube_url')
-    readonly_fields = ()
-    # Можно добавить фильтр по типу
     show_change_link = True
+
+class GalleryPhotoInline(admin.TabularInline):
+    model = GalleryPhoto
+    extra = 1
+    fields = ('image', 'description')
+
+class SocialLinkInline(admin.TabularInline):
+    model = SocialLink
+    extra = 1
+    fields = ('name', 'icon', 'url')
 
 @admin.register(Bio)
 class BioAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'quote')  # поля для отображения в списке
-    search_fields = ('full_name',)  # поиск по имени
-    inlines = [BioItemInline]  # добавляем BioItem прямо в Bio
-    list_per_page = 20  # сколько элементов на странице
-    # Если нужны кастомные поля в форме
-    # fields = ('full_name', 'main_photo', 'quote')
+    list_display = ('full_name', 'quote')
+    search_fields = ('full_name',)
+    inlines = [BioItemInline, GalleryPhotoInline, SocialLinkInline]
+    list_per_page = 20
 
 @admin.register(BioItem)
 class BioItemAdmin(admin.ModelAdmin):
@@ -25,3 +30,11 @@ class BioItemAdmin(admin.ModelAdmin):
     list_filter = ('item_type',)
     search_fields = ('bio__full_name', 'text', 'image_description', 'youtube_url')
     list_per_page = 20
+
+@admin.register(GalleryPhoto)
+class GalleryPhotoAdmin(admin.ModelAdmin):
+    list_display = ('bio', 'description')
+
+@admin.register(SocialLink)
+class SocialLinkAdmin(admin.ModelAdmin):
+    list_display = ('bio', 'name', 'url')

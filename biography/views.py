@@ -1,15 +1,14 @@
 from django.shortcuts import render
 from .models import Bio
 
-
 def home(request):
     bio = Bio.objects.first()
 
     if not bio:
         return render(request, "home.html", {"bio": None})
 
+    # ==== ITEMS ====
     items = bio.items.all()
-
     first_text = None
     hero_photo = None
     remaining_items = []
@@ -17,29 +16,24 @@ def home(request):
     for item in items:
         if item.item_type == 'photo' and not hero_photo:
             hero_photo = item
-
         elif item.item_type == 'text' and not first_text:
             first_text = item
-
         else:
             # Обработка YouTube ссылок
             if item.item_type == 'video' and item.youtube_url:
                 url = item.youtube_url.strip()
                 video_id = None
-
                 if "watch?v=" in url:
                     video_id = url.split("watch?v=")[1].split("&")[0]
                 elif "youtu.be/" in url:
                     video_id = url.split("youtu.be/")[1].split("?")[0]
-
                 if video_id:
                     item.youtube_embed_url = f"https://www.youtube.com/embed/{video_id}"
                 else:
                     item.youtube_embed_url = None
-
             remaining_items.append(item)
 
-    # Пример достижений (можешь оставить или убрать)
+    # ==== ACHIEVEMENTS ====
     achievement_texts = [
         "1971 жана 1979-жылдары Кыргыз ССРинин Жогорку Кеңешинин “Ардак Грамотасы” менен сыйланган.",
         "1980-жылы “КЫРГЫЗ ССРинин ЭМГЕК СИҢИРГЕН ЭНЕРГЕТИГИ” наамы берилген.",
@@ -60,10 +54,18 @@ def home(request):
     ]
     achievements = [{"text": a} for a in achievement_texts]
 
+    # ==== GALLERY ====
+    gallery_photos = bio.gallery_photos.all()  # подтягиваем галерею
+
+    # ==== SOCIAL LINKS ====
+    social_links = bio.social_links.all()  # подтягиваем соцсети
+
     return render(request, "home.html", {
         "bio": bio,
         "hero_photo": hero_photo,
         "first_text": first_text,
         "remaining_items": remaining_items,
-        "achievements": achievements
+        "achievements": achievements,
+        "gallery_photos": gallery_photos,
+        "social_links": social_links,
     })
