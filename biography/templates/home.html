@@ -8,21 +8,39 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
+/* --- Базовые стили --- */
 body {
     margin: 0;
     font-family: "Inter", sans-serif;
     background: #e6f0ff;
     color: #1f2d3d;
+    overflow-x: hidden;
 }
 
-/* Container */
 .container {
     max-width: 1200px;
     margin: auto;
     padding: 40px 20px;
 }
 
-/* HERO */
+/* --- Анимации --- */
+@keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(40px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up {
+    opacity: 0;
+    animation: fadeInUp 1s forwards;
+}
+
+.fade-up-delay {
+    opacity: 0;
+    animation: fadeInUp 1s forwards;
+    animation-delay: 0.3s;
+}
+
+/* --- HERO --- */
 .hero {
     display: flex;
     flex-wrap: wrap;
@@ -45,12 +63,15 @@ body {
     font-weight: 700;
     margin-bottom: 20px;
     color: #1a2a47;
+    animation: fadeInUp 1s forwards;
 }
 
 .hero-text p {
     font-size: 20px;
     line-height: 1.6;
     color: #3a4d6a;
+    animation: fadeInUp 1s forwards;
+    animation-delay: 0.2s;
 }
 
 .button {
@@ -62,14 +83,16 @@ body {
     text-decoration: none;
     border-radius: 15px;
     font-weight: 600;
-    transition: 0.3s;
+    transition: all 0.3s ease;
 }
 
 .button:hover {
+    transform: translateY(-3px);
     background: #1a4cff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 
-/* HERO PHOTO */
+/* --- HERO PHOTO --- */
 .hero-photo {
     flex: 1;
     min-width: 300px;
@@ -83,9 +106,16 @@ body {
     border-radius: 25px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.15);
     object-fit: cover;
+    transform: scale(0.95);
+    transition: transform 0.6s ease, box-shadow 0.6s ease;
 }
 
-/* SECTION */
+.hero-photo img:hover {
+    transform: scale(1);
+    box-shadow: 0 30px 70px rgba(0,0,0,0.25);
+}
+
+/* --- SECTION --- */
 .section {
     margin-top: 60px;
     background: #ffffff;
@@ -93,9 +123,17 @@ body {
     border-radius: 25px;
     box-shadow: 0 10px 35px rgba(0,0,0,0.05);
     overflow: hidden;
+    transform: translateY(40px);
+    opacity: 0;
+    transition: all 0.8s ease;
 }
 
-/* Text Block */
+.section.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* --- TEXT BLOCK --- */
 .text-block {
     font-size: 17px;
     line-height: 1.8;
@@ -103,7 +141,7 @@ body {
     white-space: pre-line;
 }
 
-/* Image Block */
+/* --- IMAGE BLOCK --- */
 .image-block {
     text-align: center;
 }
@@ -114,6 +152,13 @@ body {
     border-radius: 20px;
     margin-top: 20px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transform: scale(0.95);
+    transition: transform 0.6s ease, box-shadow 0.6s ease;
+}
+
+.image-block img:hover {
+    transform: scale(1);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
 }
 
 .image-desc {
@@ -122,7 +167,7 @@ body {
     color: #555;
 }
 
-/* Video Block */
+/* --- VIDEO BLOCK --- */
 .video-block {
     position: relative;
     width: 100%;
@@ -131,6 +176,13 @@ body {
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transform: scale(0.95);
+    transition: transform 0.6s ease, box-shadow 0.6s ease;
+}
+
+.video-block:hover {
+    transform: scale(1);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
 }
 
 .video-block::before {
@@ -148,23 +200,31 @@ body {
     border: 0;
 }
 
-/* Achievements */
+/* --- ACHIEVEMENTS --- */
 .achievement-item {
     background: #d6e4ff;
     padding: 15px 20px;
     border-radius: 15px;
     margin-bottom: 15px;
     font-weight: 500;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.8s ease;
 }
 
-/* Footer */
+.achievement-item.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* --- FOOTER --- */
 .footer {
     text-align: center;
     margin-top: 60px;
     color: #5a6a80;
 }
 
-/* Responsive */
+/* --- RESPONSIVE --- */
 @media (max-width: 768px) {
     .hero {
         flex-direction: column;
@@ -182,14 +242,14 @@ body {
 
 <!-- HERO -->
 <div class="hero">
-    <div class="hero-text">
+    <div class="hero-text fade-up">
         <h1>{{ bio.full_name }}</h1>
         {% if bio.quote %}
             <p><em>{{ bio.quote }}</em></p>
         {% endif %}
         <a href="#about" class="button">Сүрөттөмө</a>
     </div>
-    <div class="hero-photo">
+    <div class="hero-photo fade-up-delay">
         {% if bio.main_photo %}
             <img src="{{ bio.main_photo.url }}" alt="Photo">
         {% endif %}
@@ -254,6 +314,23 @@ body {
     <p>Веб-баракча заказ кылуу үчүн</p>
     <p>📞 +996 999 01 11 66 · 📧 aisaranazarbaeva@gmail.com</p>
 </div>
+
+<script>
+// --- Анимация появления при скролле ---
+function reveal() {
+    const sections = document.querySelectorAll('.section, .achievement-item');
+    sections.forEach(el => {
+        const top = el.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+        if(top < windowHeight - 50) {
+            el.classList.add('visible');
+        }
+    });
+}
+
+window.addEventListener('scroll', reveal);
+window.addEventListener('load', reveal);
+</script>
 
 </body>
 </html>
