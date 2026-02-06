@@ -1,273 +1,216 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>{{ bio.full_name }}</title>
+<title>Эргеш Төрөбаев</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 body {
     margin: 0;
     font-family: "Inter", sans-serif;
-    background: #e6f0ff;
-    color: #1f2d3d;
+    background: linear-gradient(180deg, #0f172a, #1e3a8a);
+    color: white;
     overflow-x: hidden;
 }
 
-/* Волны на фоне */
-.wave-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
+/* WAVES */
+.wave {
+    position: absolute;
     width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at 50% 50%, #cce0ff 20%, #e6f0ff 80%);
-    animation: waveMove 30s linear infinite;
-    z-index: -1;
-    transform: rotate(45deg);
+    height: 300px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+    animation: wave 12s infinite linear;
 }
 
-@keyframes waveMove {
-    0% { transform: rotate(0deg) translateX(0); }
-    50% { transform: rotate(0deg) translateX(-50px); }
-    100% { transform: rotate(0deg) translateX(0); }
+.wave1 { top: 200px; animation-duration: 20s; }
+.wave2 { top: 500px; animation-duration: 25s; }
+
+@keyframes wave {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
 }
 
 .container {
     max-width: 1200px;
     margin: auto;
     padding: 60px 20px;
+    position: relative;
+    z-index: 2;
 }
 
 /* HERO */
 .hero {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
     gap: 40px;
-    background: linear-gradient(135deg, #cce0ff, #e6f0ff);
-    border-radius: 30px;
-    padding: 50px;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.1);
-    animation: fadeIn 1.5s ease-in;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.hero-text, .hero-photo {
-    flex: 1 1 45%;
+.hero-text {
+    max-width: 600px;
+    animation: fadeInLeft 1.5s ease;
 }
 
 .hero-text h1 {
     font-size: 48px;
-    font-weight: 700;
-    margin-bottom: 20px;
-    color: #1a2a47;
 }
 
 .hero-text p {
     font-size: 20px;
     line-height: 1.6;
-    color: #3a4d6a;
 }
 
-.button {
-    display: inline-block;
-    margin-top: 25px;
-    padding: 14px 32px;
-    background: #2f6bff;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 15px;
-    font-weight: 600;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.button:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(47,107,255,0.4);
-}
-
-.hero-photo img {
-    width: 100%;
-    height: auto;
-    max-height: 420px;
-    object-fit: cover;
-    border-radius: 25px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-}
-
-/* SECTION */
-.section {
-    margin-top: 60px;
-    background: #ffffff;
-    padding: 40px;
-    border-radius: 25px;
-    box-shadow: 0 10px 35px rgba(0,0,0,0.05);
-    animation: fadeIn 1.5s ease-in;
-}
-
-.text-block {
-    font-size: 17px;
-    line-height: 1.8;
-    color: #3a4d6a;
-    white-space: pre-line;
-}
-
-.image-block img {
-    width: 100%;
-    border-radius: 20px;
+.hero-buttons button {
     margin-top: 20px;
-    transition: transform 0.3s ease;
+    padding: 12px 24px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    background: #3b82f6;
+    color: white;
+    margin-right: 10px;
+    transition: 0.3s;
 }
 
-.image-block img:hover {
+.hero-buttons button:hover {
+    background: #60a5fa;
     transform: scale(1.05);
 }
 
-.image-desc {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #555;
-}
-
-/* VIDEO */
-.video-block {
-    width: 100%;
-    max-width: 980px;
-    margin: 30px auto;
+.hero-photo img {
+    width: 320px;
     border-radius: 25px;
-    overflow: hidden;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
-}
-
-.video-block iframe {
-    width: 100%;
-    height: 551px;
-    border: none;
-}
-
-/* GALLERY */
-.gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    margin-top: 40px;
-}
-
-.gallery-item {
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.gallery-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-}
-
-.gallery-item img {
-    width: 100%;
-    display: block;
-}
-
-.gallery-item .desc {
-    padding: 10px;
-    background: #f0f4ff;
-    font-size: 14px;
-    color: #3a4d6a;
-    text-align: center;
+    box-shadow: 0 0 40px rgba(0,0,0,0.4);
+    animation: fadeInRight 1.5s ease;
 }
 
 /* ANIMATIONS */
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(20px);}
-    to {opacity: 1; transform: translateY(0);}
+@keyframes fadeInLeft {
+    from {opacity:0; transform:translateX(-50px);}
+    to {opacity:1; transform:translateX(0);}
+}
+@keyframes fadeInRight {
+    from {opacity:0; transform:translateX(50px);}
+    to {opacity:1; transform:translateX(0);}
+}
+
+/* SECTIONS */
+.section {
+    margin-top: 80px;
+    background: rgba(255,255,255,0.1);
+    padding: 40px;
+    border-radius: 25px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+}
+
+.section h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* VIDEOS */
+.video-grid iframe {
+    width: 100%;
+    height: 350px;
+    border-radius: 20px;
+    margin-bottom: 30px;
+}
+
+/* AWARDS */
+.award {
+    background: rgba(255,255,255,0.15);
+    padding: 15px;
+    border-radius: 15px;
+    margin-bottom: 10px;
 }
 
 /* FOOTER */
 .footer {
     text-align: center;
     margin-top: 60px;
-    color: #5a6a80;
+    color: #cbd5f5;
 }
-
 </style>
 </head>
 
 <body>
-<div class="wave-bg"></div>
+
+<div class="wave wave1"></div>
+<div class="wave wave2"></div>
+
 <div class="container">
 
-<!-- HERO -->
 <div class="hero">
-    <div class="hero-photo">
-        {% if bio.main_photo %}
-            <img src="{{ bio.main_photo.url }}" alt="Photo">
-        {% endif %}
-    </div>
     <div class="hero-text">
-        <h1>{{ bio.full_name }}</h1>
-        {% if bio.quote %}
-            <p><em>{{ bio.quote }}</em></p>
-        {% endif %}
-        <a href="#gallery" class="button">Сүрөттөмө</a>
+        <h1>Эргеш Төрөбаев</h1>
+        <p>Кыргыз Республикасынын эмгек сиңирген энергетиги. Өмүрүн энергетика тармагына арнаган инсан.</p>
+
+        <div class="hero-buttons">
+            <button onclick="scrollToSection('videos')">🎬 Тасмалар</button>
+            <button onclick="scrollToSection('awards')">🏅 Сыйлыктар</button>
+            <button onclick="scrollToSection('bio')">📖 Биография</button>
+        </div>
+    </div>
+
+    <div class="hero-photo">
+        <img src="/static/photo.jpg" alt="photo">
     </div>
 </div>
 
-<!-- FIRST TEXT -->
-{% if first_text %}
-<div class="section">
-    <div class="text-block">{{ first_text.text }}</div>
-</div>
-{% endif %}
-
-<!-- VIDEO -->
-<div class="video-block">
-    <iframe
-        src="https://www.youtube.com/embed/MwP-roByXj8"
-        title="Эргеш Төрөбаев тууралуу документалдуу фильм:: 2-бөлүм"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen>
-    </iframe>
+<!-- BIO -->
+<div id="bio" class="section">
+<h2>Биография</h2>
+<p>
+Эргеш Төрөбаев — энергетика тармагында көп жыл эмгектенип, өлкөнүн өнүгүшүнө чоң салым кошкон инсан.
+</p>
 </div>
 
-<!-- OTHER ITEMS -->
-{% for item in remaining_items %}
-<div class="section">
-    {% if item.item_type == "text" %}
-        <div class="text-block">{{ item.text }}</div>
-    {% elif item.item_type == "photo" and item.image %}
-        <div class="image-block">
-            <img src="{{ item.image.url }}" alt="{{ item.image_description }}">
-            {% if item.image_description %}
-                <div class="image-desc">{{ item.image_description }}</div>
-            {% endif %}
-        </div>
-    {% endif %}
-</div>
-{% endfor %}
+<!-- VIDEOS -->
+<div id="videos" class="section">
+<h2>Документалдуу тасмалар</h2>
 
-<!-- GALLERY -->
-<div id="gallery" class="section">
-    <h2>Галерея</h2>
-    <div class="gallery">
-        {% for photo in gallery_photos %}
-        <div class="gallery-item">
-            <img src="{{ photo.image.url }}" alt="{{ photo.description }}">
-            {% if photo.description %}
-            <div class="desc">{{ photo.description }}</div>
-            {% endif %}
-        </div>
-        {% endfor %}
-    </div>
+<div class="video-grid">
+
+<iframe src="https://www.youtube.com/embed/LKQ63QN8-rM" allowfullscreen></iframe>
+
+<iframe src="https://www.youtube.com/embed/MwP-roByXj8" allowfullscreen></iframe>
+
+<iframe src="https://www.youtube.com/embed/Ig_g_GcXpys" allowfullscreen></iframe>
+
+<iframe src="https://www.youtube.com/embed/BeFIQbDaoI0" allowfullscreen></iframe>
+
+<iframe src="https://www.youtube.com/embed/0YU9TMKl1HI" allowfullscreen></iframe>
+
+<iframe src="https://www.youtube.com/embed/QzWjtXIF4fY" allowfullscreen></iframe>
+
+</div>
+</div>
+
+<!-- AWARDS -->
+<div id="awards" class="section">
+<h2>Сыйлыктар жана ордендер</h2>
+
+<div class="award">🏅 Кыргыз Республикасынын эмгек сиңирген энергетиги</div>
+<div class="award">🏅 Ардак грамоталар</div>
+<div class="award">🏅 Медалдар</div>
+
 </div>
 
 <div class="footer">
-    <p>Веб-баракча заказ кылуу үчүн</p>
-    <p>📞 +996 999 01 11 66 · 📧 aisaranazarbaeva@gmail.com</p>
+<p>Веб-сайт даярдаган: Айсара</p>
 </div>
+
+</div>
+
+<script>
+function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({behavior:"smooth"});
+}
+</script>
 
 </body>
 </html>
