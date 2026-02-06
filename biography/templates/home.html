@@ -296,16 +296,23 @@ body {
             {% endif %}
         </div>
 
-    {% elif item.item_type == "video" and item.youtube_url %}
-        <div class="video-block">
-            <iframe
-                src="{{ item.youtube_embed_url|safe }}"
-                title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen>
-            </iframe>
-        </div>
-    {% endif %}
+    <!-- VIDEO -->
+<div class="section">
+    <h2>Документальный фильм</h2>
+    <div class="video-block">
+        <iframe
+            width="980"
+            height="551"
+            src="https://www.youtube.com/embed/MwP-roByXj8"
+            title="Эргеш Төрөбаев тууралуу документалдуу фильм:: 2-бөлүм"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen>
+        </iframe>
+    </div>
+</div>
+
 </div>
 {% endfor %}
 
