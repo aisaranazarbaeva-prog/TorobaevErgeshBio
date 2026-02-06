@@ -1,8 +1,9 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Эргеш Төрөбаев</title>
+<title>{{ bio.title|default:"Эргеш Төрөбаев" }}</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -15,18 +16,16 @@ body {
     overflow-x: hidden;
 }
 
-/* WAVES */
 .wave {
     position: absolute;
     width: 200%;
     height: 300px;
     background: rgba(255,255,255,0.05);
     border-radius: 50%;
-    animation: wave 12s infinite linear;
+    animation: wave 20s infinite linear;
 }
-
-.wave1 { top: 200px; animation-duration: 20s; }
-.wave2 { top: 500px; animation-duration: 25s; }
+.wave1 { top: 200px; }
+.wave2 { top: 500px; animation-duration: 30s; }
 
 @keyframes wave {
     from { transform: translateX(0); }
@@ -41,7 +40,6 @@ body {
     z-index: 2;
 }
 
-/* HERO */
 .hero {
     display: flex;
     gap: 40px;
@@ -54,14 +52,7 @@ body {
     animation: fadeInLeft 1.5s ease;
 }
 
-.hero-text h1 {
-    font-size: 48px;
-}
-
-.hero-text p {
-    font-size: 20px;
-    line-height: 1.6;
-}
+.hero-text h1 { font-size: 48px; }
 
 .hero-buttons button {
     margin-top: 20px;
@@ -73,46 +64,20 @@ body {
     background: #3b82f6;
     color: white;
     margin-right: 10px;
-    transition: 0.3s;
-}
-
-.hero-buttons button:hover {
-    background: #60a5fa;
-    transform: scale(1.05);
 }
 
 .hero-photo img {
     width: 320px;
     border-radius: 25px;
-    box-shadow: 0 0 40px rgba(0,0,0,0.4);
-    animation: fadeInRight 1.5s ease;
 }
 
-/* ANIMATIONS */
-@keyframes fadeInLeft {
-    from {opacity:0; transform:translateX(-50px);}
-    to {opacity:1; transform:translateX(0);}
-}
-@keyframes fadeInRight {
-    from {opacity:0; transform:translateX(50px);}
-    to {opacity:1; transform:translateX(0);}
-}
-
-/* SECTIONS */
 .section {
     margin-top: 80px;
     background: rgba(255,255,255,0.1);
     padding: 40px;
     border-radius: 25px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.3);
 }
 
-.section h2 {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-/* VIDEOS */
 .video-grid iframe {
     width: 100%;
     height: 350px;
@@ -120,7 +85,17 @@ body {
     margin-bottom: 30px;
 }
 
-/* AWARDS */
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+    gap: 20px;
+}
+
+.photo-grid img {
+    width: 100%;
+    border-radius: 15px;
+}
+
 .award {
     background: rgba(255,255,255,0.15);
     padding: 15px;
@@ -128,11 +103,15 @@ body {
     margin-bottom: 10px;
 }
 
-/* FOOTER */
 .footer {
     text-align: center;
     margin-top: 60px;
     color: #cbd5f5;
+}
+
+@keyframes fadeInLeft {
+    from {opacity:0; transform:translateX(-50px);}
+    to {opacity:1; transform:translateX(0);}
 }
 </style>
 </head>
@@ -146,27 +125,27 @@ body {
 
 <div class="hero">
     <div class="hero-text">
-        <h1>Эргеш Төрөбаев</h1>
-        <p>Кыргыз Республикасынын эмгек сиңирген энергетиги. Өмүрүн энергетика тармагына арнаган инсан.</p>
+        <h1>{{ bio.title }}</h1>
+        <p>{{ first_text.text }}</p>
 
         <div class="hero-buttons">
             <button onclick="scrollToSection('videos')">🎬 Тасмалар</button>
+            <button onclick="scrollToSection('gallery')">🖼 Галерея</button>
             <button onclick="scrollToSection('awards')">🏅 Сыйлыктар</button>
-            <button onclick="scrollToSection('bio')">📖 Биография</button>
         </div>
     </div>
 
     <div class="hero-photo">
-        <img src="/static/photo.jpg" alt="photo">
+        {% if hero_photo %}
+            <img src="{{ hero_photo.image.url }}" alt="photo">
+        {% endif %}
     </div>
 </div>
 
 <!-- BIO -->
 <div id="bio" class="section">
 <h2>Биография</h2>
-<p>
-Эргеш Төрөбаев — энергетика тармагында көп жыл эмгектенип, өлкөнүн өнүгүшүнө чоң салым кошкон инсан.
-</p>
+<p>{{ bio.description }}</p>
 </div>
 
 <!-- VIDEOS -->
@@ -174,19 +153,27 @@ body {
 <h2>Документалдуу тасмалар</h2>
 
 <div class="video-grid">
+{% for item in remaining_items %}
+    {% if item.item_type == "video" and item.youtube_embed_url %}
+        <iframe src="{{ item.youtube_embed_url }}" frameborder="0" allowfullscreen></iframe>
+    {% endif %}
+{% endfor %}
+</div>
+</div>
 
-<iframe src="https://www.youtube.com/embed/LKQ63QN8-rM" allowfullscreen></iframe>
+<!-- GALLERY -->
+<div id="gallery" class="section">
+<h2>Галерея</h2>
 
-<iframe src="https://www.youtube.com/embed/MwP-roByXj8" allowfullscreen></iframe>
-
-<iframe src="https://www.youtube.com/embed/Ig_g_GcXpys" allowfullscreen></iframe>
-
-<iframe src="https://www.youtube.com/embed/BeFIQbDaoI0" allowfullscreen></iframe>
-
-<iframe src="https://www.youtube.com/embed/0YU9TMKl1HI" allowfullscreen></iframe>
-
-<iframe src="https://www.youtube.com/embed/QzWjtXIF4fY" allowfullscreen></iframe>
-
+<div class="photo-grid">
+{% for item in remaining_items %}
+    {% if item.item_type == "photo" %}
+        <div>
+            <img src="{{ item.image.url }}">
+            <p>{{ item.text }}</p>
+        </div>
+    {% endif %}
+{% endfor %}
 </div>
 </div>
 
@@ -194,10 +181,9 @@ body {
 <div id="awards" class="section">
 <h2>Сыйлыктар жана ордендер</h2>
 
-<div class="award">🏅 Кыргыз Республикасынын эмгек сиңирген энергетиги</div>
-<div class="award">🏅 Ардак грамоталар</div>
-<div class="award">🏅 Медалдар</div>
-
+{% for a in achievements %}
+<div class="award">🏅 {{ a.text }}</div>
+{% endfor %}
 </div>
 
 <div class="footer">
