@@ -30,7 +30,6 @@ class BioItem(models.Model):
 
     # ===== НОВЫЙ КЛАСС ДЛЯ ГАЛЕРЕИ =====
 class GalleryPhoto(models.Model):
-        bio = models.ForeignKey(Bio, related_name='gallery_photos', on_delete=models.CASCADE)
         image = CloudinaryField('image', blank=True, null=True)
         description = models.TextField(blank=True, null=True)
 
@@ -39,7 +38,6 @@ class GalleryPhoto(models.Model):
 
     # ===== НОВЫЙ КЛАСС ДЛЯ СОЦСЕТЕЙ / ЛОГОТИПОВ =====
 class SocialLink(models.Model):
-        bio = models.ForeignKey(Bio, related_name='social_links', on_delete=models.CASCADE)
         name = models.CharField(max_length=50)  # Например: "Facebook" или "WhatsApp"
         icon = CloudinaryField('image', blank=True, null=True) # Маленький логотип
         url = models.URLField()  # Ссылка на соцсеть
