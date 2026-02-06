@@ -33,8 +33,8 @@ class BioItemAdmin(admin.ModelAdmin):
 
 @admin.register(GalleryPhoto)
 class GalleryPhotoAdmin(admin.ModelAdmin):
-    list_display = ('bio', 'description')
+    list_display = ( 'description')
 
 @admin.register(SocialLink)
 class SocialLinkAdmin(admin.ModelAdmin):
-    list_display = ('bio', 'name', 'url')
+    list_display = ( 'name', 'url')

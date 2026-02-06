@@ -33,8 +33,7 @@ class GalleryPhoto(models.Model):
         image = CloudinaryField('image', blank=True, null=True)
         description = models.TextField(blank=True, null=True)
 
-        def __str__(self):
-            return f"{self.bio.full_name} - Галерея"
+
 
     # ===== НОВЫЙ КЛАСС ДЛЯ СОЦСЕТЕЙ / ЛОГОТИПОВ =====
 class SocialLink(models.Model):
@@ -43,4 +42,4 @@ class SocialLink(models.Model):
         url = models.URLField()  # Ссылка на соцсеть
 
         def __str__(self):
-            return f"{self.bio.full_name} - {self.name}"
+            return f"{self.name.full_name} - {self.name}"
