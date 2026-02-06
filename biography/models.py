@@ -15,31 +15,37 @@ class BioItem(models.Model):
     ITEM_TYPES = (
         ('text', 'Text'),
         ('photo', 'Photo'),
-        ('video', 'Video'),  # добавили тип для YouTube
+        ('video', 'Video'),
     )
 
     bio = models.ForeignKey(Bio, related_name='items', on_delete=models.CASCADE)
     item_type = models.CharField(max_length=10, choices=ITEM_TYPES)
 
     text = models.TextField(blank=True, null=True)
-
     image = CloudinaryField('image', blank=True, null=True)
-    image_description = models.TextField(blank=True, null=True)  # описание фото ✅
+    image_description = models.TextField(blank=True, null=True)
+    youtube_url = models.URLField(blank=True, null=True)
 
-    youtube_url = models.URLField(blank=True, null=True)  # ссылка на YouTube видео ✅
+    def __str__(self):
+        return f"{self.bio.full_name} - {self.item_type}"
 
-    # ===== НОВЫЙ КЛАСС ДЛЯ ГАЛЕРЕИ =====
+
+# ===== ГАЛЕРЕЯ =====
 class GalleryPhoto(models.Model):
-        image = CloudinaryField('image', blank=True, null=True)
-        description = models.TextField(blank=True, null=True)
+    bio = models.ForeignKey(Bio, related_name="gallery_photos", on_delete=models.CASCADE)
+    image = CloudinaryField('image', blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.bio.full_name} - Gallery photo"
 
 
-
-    # ===== НОВЫЙ КЛАСС ДЛЯ СОЦСЕТЕЙ / ЛОГОТИПОВ =====
+# ===== СОЦСЕТИ / ЛОГОТИПЫ =====
 class SocialLink(models.Model):
-        name = models.CharField(max_length=50)  # Например: "Facebook" или "WhatsApp"
-        icon = CloudinaryField('image', blank=True, null=True) # Маленький логотип
-        url = models.URLField()  # Ссылка на соцсеть
+    bio = models.ForeignKey(Bio, related_name="social_links", on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    icon = CloudinaryField('image', blank=True, null=True)
+    url = models.URLField()
 
-        def __str__(self):
-            return f"{self.name.full_name} - {self.name}"
+    def __str__(self):
+        return f"{self.bio.full_name} - {self.name}"
