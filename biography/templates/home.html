@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
+/* === Стили оставлены без изменений, как у тебя === */
 body {
     margin: 0;
     font-family: "Inter", sans-serif;
@@ -224,14 +225,18 @@ body {
 <div id="gallery" class="section">
 <h2>Галерея</h2>
 <div class="gallery">
-    {% for photo in gallery_photos %}
-    <div class="gallery-item">
-        <img src="{{ photo.image.url }}" alt="{{ photo.description }}">
-        {% if photo.description %}
-        <div class="desc">{{ photo.description }}</div>
-        {% endif %}
-    </div>
-    {% endfor %}
+    {% if bio.gallery_photos.exists %}
+        {% for photo in bio.gallery_photos.all %}
+        <div class="gallery-item">
+            <img src="{{ photo.image.url }}" alt="{{ photo.description }}">
+            {% if photo.description %}
+            <div class="desc">{{ photo.description }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>Галерея пока пуста.</p>
+    {% endif %}
 </div>
 </div>
 
@@ -245,11 +250,13 @@ body {
 
 <!-- SOCIAL LINKS -->
 <div class="social-links">
-{% for link in social_links %}
-<a href="{{ link.url }}" target="_blank">
-    <img src="{{ link.icon.url }}" alt="{{ link.name }}">
-</a>
-{% endfor %}
+{% if bio.social_links.exists %}
+    {% for link in bio.social_links.all %}
+    <a href="{{ link.url }}" target="_blank">
+        <img src="{{ link.icon.url }}" alt="{{ link.name }}">
+    </a>
+    {% endfor %}
+{% endif %}
 </div>
 
 <!-- FOOTER -->
