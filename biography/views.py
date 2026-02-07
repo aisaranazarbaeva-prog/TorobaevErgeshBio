@@ -1,25 +1,68 @@
-from django.contrib import admin
-from .models import Bio, BioItem
+from django.shortcuts import render
+from .models import Bio
 
-# Inline для BioItem, чтобы редактировать элементы прямо в Bio
-class BioItemInline(admin.TabularInline):  # Можно использовать StackedInline для вертикального вида
-    model = BioItem
-    extra = 1  # сколько пустых форм добавлять
-    fields = ('item_type', 'text', 'image', 'image_description', 'youtube_url')
-    readonly_fields = ()
-    show_change_link = True
+def home(request):
+    bio = Bio.objects.first()
 
-@admin.register(Bio)
-class BioAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'quote')  # поля для отображения в списке
-    search_fields = ('full_name',)  # поиск по имени
-    inlines = [BioItemInline]  # добавляем BioItem прямо в Bio
-    list_per_page = 20  # сколько элементов на странице
-    # fields = ('full_name', 'main_photo', 'quote')  # если нужны кастомные поля в форме
+    if not bio:
+        return render(request, "home.html", {"bio": None})
 
-@admin.register(BioItem)
-class BioItemAdmin(admin.ModelAdmin):
-    list_display = ('bio', 'item_type', 'text', 'youtube_url')
-    list_filter = ('item_type',)
-    search_fields = ('bio__full_name', 'text', 'image_description', 'youtube_url')
-    list_per_page = 20
+    items = bio.items.all()
+
+    first_text = None
+    hero_photo = None
+    remaining_items = []
+
+    for item in items:
+        if item.item_type == 'photo' and not hero_photo:
+            hero_photo = item
+
+        elif item.item_type == 'text' and not first_text:
+            first_text = item
+
+        else:
+            # Обработка YouTube ссылок
+            if item.item_type == 'video' and item.youtube_url:
+                url = item.youtube_url.strip()
+                video_id = None
+
+                if "watch?v=" in url:
+                    video_id = url.split("watch?v=")[1].split("&")[0]
+                elif "youtu.be/" in url:
+                    video_id = url.split("youtu.be/")[1].split("?")[0]
+
+                if video_id:
+                    item.youtube_embed_url = f"https://www.youtube.com/embed/{video_id}"
+                else:
+                    item.youtube_embed_url = None
+
+            remaining_items.append(item)
+
+    # Пример достижений
+    achievement_texts = [
+        "1971 жана 1979-жылдары Кыргыз ССРинин Жогорку Кеңешинин “Ардак Грамотасы” менен сыйланган.",
+        "1980-жылы “КЫРГЫЗ ССРинин ЭМГЕК СИҢИРГЕН ЭНЕРГЕТИГИ” наамы берилген.",
+        "1987-жылы “СССРдин энергетика жана электрофикациясынын отличниги” деген наам берилген.",
+        "1995-жылы Кыргыз Республикасынын “Ардак грамотасы” менен сыйланган.",
+        "1995-жылы “Манас-1000” Эстелик медалы менен сыйланган.",
+        "1997-жылы “Жалал-Абад шаарынын ардактуу атуулу” наамы ыйгарылган.",
+        "1998-жылы Кыргыз Республикасынын “Үчүнчү даражадагы Манас” ордени менен сыйланган.",
+        "2001-жылы “Сузак районунун ардактуу атуулу” наамын алган.",
+        "2001-жылы ЖАМУнун “Ардактуу профессору” наамы ыйгарылган.",
+        "2002-жылы “КМШнын эмгек сиңирген энергетиги” белгиси менен сыйланган.",
+        "2002-жылы “Ош-3000” медалы ыйгарылган.",
+        "2004-жылы II класстагы Мамлекеттик кеңешчи наамы берилген.",
+        "2006-жылы КМШнын Ардак грамотасы.",
+        "2007-жылы Петр I ордени.",
+        "2012-жылы көмөк чордонго аты берилген.",
+        "2025-жылы Жалал-Абад облусунун ардактуу атуулу."
+    ]
+    achievements = [{"text": a} for a in achievement_texts]
+
+    return render(request, "home.html", {
+        "bio": bio,
+        "hero_photo": hero_photo,
+        "first_text": first_text,
+        "remaining_items": remaining_items,
+        "achievements": achievements
+    })
