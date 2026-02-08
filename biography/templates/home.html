@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-/* === Стили оставлены без изменений, как у тебя === */
 body {
     margin: 0;
     font-family: "Inter", sans-serif;
@@ -22,7 +21,6 @@ body {
     padding: 60px 20px;
 }
 
-/* HERO */
 .hero {
     display: flex;
     gap: 40px;
@@ -75,7 +73,6 @@ body {
     animation: fadeInRight 1.5s ease;
 }
 
-/* ANIMATIONS */
 @keyframes fadeInLeft {
     from {opacity:0; transform:translateX(-50px);}
     to {opacity:1; transform:translateX(0);}
@@ -85,7 +82,6 @@ body {
     to {opacity:1; transform:translateX(0);}
 }
 
-/* SECTIONS */
 .section {
     margin-top: 60px;
     background: rgba(255,255,255,0.1);
@@ -99,7 +95,6 @@ body {
     margin-bottom: 30px;
 }
 
-/* TEXT & IMAGE */
 .text-block {
     font-size: 18px;
     line-height: 1.8;
@@ -107,19 +102,6 @@ body {
     white-space: pre-line;
 }
 
-.image-block img {
-    width: 100%;
-    border-radius: 20px;
-    margin-top: 20px;
-}
-
-.image-desc {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #cbd5f5;
-}
-
-/* VIDEO */
 .video-block iframe {
     width: 100%;
     height: 500px;
@@ -127,26 +109,6 @@ body {
     margin-bottom: 25px;
 }
 
-/* GALLERY */
-.gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-.gallery-item img {
-    width: 100%;
-    border-radius: 20px;
-}
-
-.gallery-item .desc {
-    font-size: 14px;
-    text-align: center;
-    color: #cbd5f5;
-    margin-top: 5px;
-}
-
-/* ACHIEVEMENTS */
 .achievement-item {
     background: rgba(255,255,255,0.2);
     padding: 15px 20px;
@@ -154,20 +116,6 @@ body {
     margin-bottom: 15px;
 }
 
-/* SOCIAL LINKS */
-.social-links {
-    margin-top: 40px;
-    display: flex;
-    gap: 15px;
-    align-items: center;
-}
-
-.social-links a img {
-    width: 30px;
-    height: 30px;
-}
-
-/* FOOTER */
 .footer {
     text-align: center;
     margin-top: 60px;
@@ -188,7 +136,6 @@ body {
 
         <div class="hero-buttons">
             <button onclick="scrollToSection('videos')">🎬 Тасмалар</button>
-            <button onclick="scrollToSection('gallery')">🖼 Галерея</button>
             <button onclick="scrollToSection('achievements')">🏅 Сыйлыктар</button>
             <button onclick="scrollToSection('bio')">📖 Биография</button>
         </div>
@@ -221,42 +168,12 @@ body {
 {% endfor %}
 </div>
 
-<!-- GALLERY -->
-<div id="gallery" class="section">
-<h2>Галерея</h2>
-<div class="gallery">
-    {% if bio.gallery_photos.exists %}
-        {% for photo in bio.gallery_photos.all %}
-        <div class="gallery-item">
-            <img src="{{ photo.image.url }}" alt="{{ photo.description }}">
-            {% if photo.description %}
-            <div class="desc">{{ photo.description }}</div>
-            {% endif %}
-        </div>
-        {% endfor %}
-    {% else %}
-        <p>Галерея пока пуста.</p>
-    {% endif %}
-</div>
-</div>
-
 <!-- ACHIEVEMENTS -->
 <div id="achievements" class="section">
 <h2>Сыйлыктар жана ордендер</h2>
 {% for a in achievements %}
 <div class="achievement-item">{{ a.text }}</div>
 {% endfor %}
-</div>
-
-<!-- SOCIAL LINKS -->
-<div class="social-links">
-{% if bio.social_links.exists %}
-    {% for link in bio.social_links.all %}
-    <a href="{{ link.url }}" target="_blank">
-        <img src="{{ link.icon.url }}" alt="{{ link.name }}">
-    </a>
-    {% endfor %}
-{% endif %}
 </div>
 
 <!-- FOOTER -->
