@@ -153,17 +153,24 @@ body::before {
 </div>
 </div>
 
-<!-- FOOTER -->
+<!-- Footer -->
 <div class="footer">
-<a href="https://wa.me/996999011166" target="_blank"><img src="{% static 'wa_icon.png' %}" alt="WhatsApp"></a>
-{% if remaining_items|last and remaining_items|last.item_type == "photo" %}
-<img src="{{ remaining_items|last.image.url }}" class="last-photo" alt="Последняя Фото">
-{% endif %}
-<a href="https://www.facebook.com/100013104250618/" target="_blank"><img src="{% static 'fb_icon.png' %}" alt="Facebook"></a>
-<p style="font-size:12px; margin-left:10px;">Веб баракча заказ кылуу үчүн</p>
+    <a href="https://wa.me/996999011166" target="_blank">
+        <img src="{% static 'wa_icon.png' %}" alt="WhatsApp">
+    </a>
+
+    {% comment %} Получаем последнюю фотографию из галереи {% endcomment %}
+    {% with last_photo=remaining_items|last %}
+        {% if last_photo.item_type == "photo" %}
+            <img src="{{ last_photo.image.url }}" class="last-photo" alt="Последняя Фото">
+        {% endif %}
+    {% endwith %}
+
+    <a href="https://www.facebook.com/100013104250618/" target="_blank">
+        <img src="{% static 'fb_icon.png' %}" alt="Facebook">
+    </a>
 </div>
 
-</div>
 
 <script>
 function scrollToSection(id){ document.getElementById(id).scrollIntoView({behavior:"smooth"}); }
