@@ -7,31 +7,45 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-/* === Основной стиль === */
+/* === Общий стиль === */
 body {
     margin: 0;
     font-family: "Inter", sans-serif;
-    background: #e0f2ff url("{% static 'img/pattern.png' %}") repeat;
-    color: #1e293b;
+    background: #0f172a;
+    color: white;
     overflow-x: hidden;
+    position: relative;
 }
 
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(96,165,250,0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: -1;
+}
+
+/* === Контейнер === */
 .container {
     max-width: 1200px;
     margin: auto;
     padding: 60px 20px;
 }
 
-/* HERO */
+/* === HERO === */
 .hero {
     display: flex;
     gap: 40px;
     align-items: center;
     justify-content: space-between;
-    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
     border-radius: 30px;
     padding: 50px;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.4);
 }
 
 .hero-text {
@@ -42,14 +56,12 @@ body {
 .hero-text h1 {
     font-size: 48px;
     margin-bottom: 10px;
-    color: white;
 }
 
 .hero-text p {
     font-size: 20px;
     line-height: 1.6;
     margin-bottom: 25px;
-    color: #f0f9ff;
 }
 
 .hero-buttons button {
@@ -73,11 +85,11 @@ body {
 .hero-photo img {
     width: 320px;
     border-radius: 25px;
-    box-shadow: 0 0 40px rgba(0,0,0,0.4);
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
     animation: fadeInRight 1.5s ease;
 }
 
-/* ANIMATIONS */
+/* === Анимации === */
 @keyframes fadeInLeft {
     from {opacity:0; transform:translateX(-50px);}
     to {opacity:1; transform:translateX(0);}
@@ -87,31 +99,52 @@ body {
     to {opacity:1; transform:translateX(0);}
 }
 
-/* SECTIONS */
+/* === Секции === */
 .section {
     margin-top: 60px;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05);
     padding: 40px;
     border-radius: 25px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.2);
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
 }
 
 /* Заголовки секций */
 .section h2 {
     text-align: center;
     margin-bottom: 30px;
-    color: #1e3a8a;
+    font-weight: 700;
+    font-size: 32px;
 }
 
-/* TEXT BLOCK */
+/* === Текст и изображения === */
 .text-block {
     font-size: 18px;
     line-height: 1.8;
-    color: #1e293b;
+    color: #e0e7ff;
     white-space: pre-line;
 }
 
-/* GALLERY */
+.image-block img {
+    width: 100%;
+    border-radius: 20px;
+    margin-top: 20px;
+}
+
+.image-desc {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #cbd5f5;
+}
+
+/* === Видео === */
+.video-block iframe {
+    width: 100%;
+    height: 533px;
+    border-radius: 20px;
+    margin-bottom: 25px;
+}
+
+/* === Галерея === */
 .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -126,35 +159,24 @@ body {
 .gallery-item .desc {
     font-size: 14px;
     text-align: center;
-    color: #1e40af;
+    color: #cbd5f5;
     margin-top: 5px;
 }
 
-/* VIDEO */
-.video-block {
-    margin-bottom: 25px;
-}
-
-.video-block iframe {
-    width: 100%;
-    height: 500px;
-    border-radius: 20px;
-    border: none;
-}
-
-/* ACHIEVEMENTS */
+/* === Сыйлыктар === */
 .achievement-item {
-    background: rgba(96,165,250,0.2);
+    background: rgba(255,255,255,0.1);
     padding: 15px 20px;
     border-radius: 15px;
     margin-bottom: 15px;
+    font-size: 18px;
 }
 
-/* FOOTER */
+/* === Footer === */
 .footer {
     text-align: center;
     margin-top: 60px;
-    color: #1e3a8a;
+    color: #cbd5f5;
 }
 </style>
 </head>
@@ -171,10 +193,11 @@ body {
         <div class="hero-buttons">
             <button onclick="scrollToSection('achievements')">🏅 Сыйлыктар</button>
             <button onclick="scrollToSection('bio')">📖 Биография</button>
-            <button onclick="scrollToSection('videos')">🎬 Тасмалар</button>
             <button onclick="scrollToSection('gallery')">🖼 Суроттор</button>
+            <button onclick="scrollToSection('videos')">🎬 Тасмалар</button>
         </div>
     </div>
+
     <div class="hero-photo">
         {% if bio.main_photo %}
         <img src="{{ bio.main_photo.url }}" alt="Photo">
@@ -198,34 +221,31 @@ body {
 {% endfor %}
 </div>
 
-<!-- GALLERY / СУРОТТОР -->
+<!-- GALLERY -->
 <div id="gallery" class="section">
-<h2>Суроттор</h2>
+<h2>Галерея</h2>
 <div class="gallery">
-{% for photo in bio.gallery_photos.all %}
+{% if bio.gallery_photos.exists %}
+    {% for photo in bio.gallery_photos.all %}
     <div class="gallery-item">
         <img src="{{ photo.image.url }}" alt="{{ photo.description }}">
         {% if photo.description %}
         <div class="desc">{{ photo.description }}</div>
         {% endif %}
     </div>
-{% endfor %}
+    {% endfor %}
+{% else %}
+    <p>Галерея пока пуста.</p>
+{% endif %}
 </div>
 </div>
 
-<!-- VIDEOS / ЮТУБ -->
+<!-- VIDEOS -->
 <div id="videos" class="section">
 <h2>Документалдуу тасмалар</h2>
 <div class="video-block">
-    <iframe src="https://www.youtube.com/embed/MwP-roByXj8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<iframe width="948" height="533" src="https://www.youtube.com/embed/LKQ63QN8-rM" title="Эргеш Төрөбаев тууралуу документалдуу фильм:: 1-бөлүм" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
-{% for item in remaining_items %}
-    {% if item.item_type == "video" and item.youtube_embed_url %}
-    <div class="video-block">
-        <iframe src="{{ item.youtube_embed_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-    </div>
-    {% endif %}
-{% endfor %}
 </div>
 
 <!-- FOOTER -->
