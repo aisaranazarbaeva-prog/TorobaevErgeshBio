@@ -7,11 +7,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
+/* === Основной стиль === */
 body {
     margin: 0;
     font-family: "Inter", sans-serif;
-    background: linear-gradient(180deg, #0f172a, #1e3a8a);
-    color: white;
+    background: #e0f2ff url("{% static 'img/pattern.png' %}") repeat;
+    color: #1e293b;
     overflow-x: hidden;
 }
 
@@ -21,12 +22,13 @@ body {
     padding: 60px 20px;
 }
 
+/* HERO */
 .hero {
     display: flex;
     gap: 40px;
     align-items: center;
     justify-content: space-between;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
     border-radius: 30px;
     padding: 50px;
     box-shadow: 0 15px 50px rgba(0,0,0,0.2);
@@ -40,12 +42,14 @@ body {
 .hero-text h1 {
     font-size: 48px;
     margin-bottom: 10px;
+    color: white;
 }
 
 .hero-text p {
     font-size: 20px;
     line-height: 1.6;
     margin-bottom: 25px;
+    color: #f0f9ff;
 }
 
 .hero-buttons button {
@@ -73,6 +77,7 @@ body {
     animation: fadeInRight 1.5s ease;
 }
 
+/* ANIMATIONS */
 @keyframes fadeInLeft {
     from {opacity:0; transform:translateX(-50px);}
     to {opacity:1; transform:translateX(0);}
@@ -82,44 +87,74 @@ body {
     to {opacity:1; transform:translateX(0);}
 }
 
+/* SECTIONS */
 .section {
     margin-top: 60px;
     background: rgba(255,255,255,0.1);
     padding: 40px;
     border-radius: 25px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    box-shadow: 0 0 30px rgba(0,0,0,0.2);
 }
 
+/* Заголовки секций */
 .section h2 {
     text-align: center;
     margin-bottom: 30px;
+    color: #1e3a8a;
 }
 
+/* TEXT BLOCK */
 .text-block {
     font-size: 18px;
     line-height: 1.8;
-    color: #e0e7ff;
+    color: #1e293b;
     white-space: pre-line;
+}
+
+/* GALLERY */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.gallery-item img {
+    width: 100%;
+    border-radius: 20px;
+}
+
+.gallery-item .desc {
+    font-size: 14px;
+    text-align: center;
+    color: #1e40af;
+    margin-top: 5px;
+}
+
+/* VIDEO */
+.video-block {
+    margin-bottom: 25px;
 }
 
 .video-block iframe {
     width: 100%;
     height: 500px;
     border-radius: 20px;
-    margin-bottom: 25px;
+    border: none;
 }
 
+/* ACHIEVEMENTS */
 .achievement-item {
-    background: rgba(255,255,255,0.2);
+    background: rgba(96,165,250,0.2);
     padding: 15px 20px;
     border-radius: 15px;
     margin-bottom: 15px;
 }
 
+/* FOOTER */
 .footer {
     text-align: center;
     margin-top: 60px;
-    color: #cbd5f5;
+    color: #1e3a8a;
 }
 </style>
 </head>
@@ -133,14 +168,13 @@ body {
         {% if bio.quote %}
         <p><em>{{ bio.quote }}</em></p>
         {% endif %}
-
         <div class="hero-buttons">
-            <button onclick="scrollToSection('videos')">🎬 Тасмалар</button>
             <button onclick="scrollToSection('achievements')">🏅 Сыйлыктар</button>
             <button onclick="scrollToSection('bio')">📖 Биография</button>
+            <button onclick="scrollToSection('videos')">🎬 Тасмалар</button>
+            <button onclick="scrollToSection('gallery')">🖼 Суроттор</button>
         </div>
     </div>
-
     <div class="hero-photo">
         {% if bio.main_photo %}
         <img src="{{ bio.main_photo.url }}" alt="Photo">
@@ -156,23 +190,41 @@ body {
 {% endif %}
 </div>
 
-<!-- VIDEOS -->
+<!-- ACHIEVEMENTS -->
+<div id="achievements" class="section">
+<h2>Сыйлыктар жана ордендер</h2>
+{% for a in achievements %}
+<div class="achievement-item">{{ a.text }}</div>
+{% endfor %}
+</div>
+
+<!-- GALLERY / СУРОТТОР -->
+<div id="gallery" class="section">
+<h2>Суроттор</h2>
+<div class="gallery">
+{% for photo in bio.gallery_photos.all %}
+    <div class="gallery-item">
+        <img src="{{ photo.image.url }}" alt="{{ photo.description }}">
+        {% if photo.description %}
+        <div class="desc">{{ photo.description }}</div>
+        {% endif %}
+    </div>
+{% endfor %}
+</div>
+</div>
+
+<!-- VIDEOS / ЮТУБ -->
 <div id="videos" class="section">
 <h2>Документалдуу тасмалар</h2>
+<div class="video-block">
+    <iframe src="https://www.youtube.com/embed/MwP-roByXj8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
 {% for item in remaining_items %}
     {% if item.item_type == "video" and item.youtube_embed_url %}
     <div class="video-block">
         <iframe src="{{ item.youtube_embed_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
     {% endif %}
-{% endfor %}
-</div>
-
-<!-- ACHIEVEMENTS -->
-<div id="achievements" class="section">
-<h2>Сыйлыктар жана ордендер</h2>
-{% for a in achievements %}
-<div class="achievement-item">{{ a.text }}</div>
 {% endfor %}
 </div>
 
