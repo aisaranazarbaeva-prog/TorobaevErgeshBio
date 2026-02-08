@@ -6,15 +6,11 @@
 <title>{{ bio.full_name }}</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-<!-- Lightbox для галереи -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet">
-
 <style>
-/* Общий стиль */
 body {
     margin: 0;
     font-family: "Inter", sans-serif;
-    background: #0f172a;
+    background: linear-gradient(180deg, #0f172a, #1e3a8a);
     color: white;
     overflow-x: hidden;
     position: relative;
@@ -22,68 +18,63 @@ body {
 body::before {
     content: "";
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top:0; left:0;
+    width:100%; height:100%;
     background: radial-gradient(circle, rgba(96,165,250,0.05) 1px, transparent 1px);
     background-size: 40px 40px;
     z-index: -1;
 }
-
-/* Контейнер */
-.container { max-width: 1200px; margin: auto; padding: 60px 20px; }
-
-/* HERO */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 60px 20px;
+}
 .hero {
-    display: flex;
-    gap: 40px;
-    align-items: center;
-    justify-content: space-between;
+    display:flex; gap:40px; align-items:center; justify-content:space-between;
     background: linear-gradient(135deg, #3b82f6, #2563eb);
-    border-radius: 30px;
-    padding: 50px;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+    border-radius:30px; padding:50px; box-shadow:0 15px 50px rgba(0,0,0,0.4);
 }
-.hero-text { max-width: 600px; animation: fadeInLeft 1.5s ease; }
-.hero-text h1 { font-size: 48px; margin-bottom: 10px; }
-.hero-text p { font-size: 20px; line-height: 1.6; margin-bottom: 25px; }
+.hero-text { max-width:600px; animation: fadeInLeft 1.5s ease; }
+.hero-text h1 { font-size:48px; margin-bottom:10px; }
+.hero-text p { font-size:20px; line-height:1.6; margin-bottom:25px; }
 .hero-buttons button {
-    margin-right: 15px; margin-top: 10px; padding: 12px 24px;
-    border-radius: 20px; border: none; font-weight: 600;
-    cursor: pointer; background: #60a5fa; color: white;
-    transition: 0.3s;
+    margin-right:15px; margin-top:10px;
+    padding:12px 24px; border-radius:20px; border:none;
+    font-weight:600; cursor:pointer; background:#60a5fa; color:white;
+    transition:0.3s;
 }
-.hero-buttons button:hover { background: #93c5fd; transform: scale(1.05); }
-.hero-photo img { width: 320px; border-radius: 25px; box-shadow: 0 0 50px rgba(0,0,0,0.5); animation: fadeInRight 1.5s ease; }
+.hero-buttons button:hover { background:#93c5fd; transform:scale(1.05); }
+.hero-photo img {
+    width:320px; border-radius:25px; box-shadow:0 0 50px rgba(0,0,0,0.5);
+    animation: fadeInRight 1.5s ease;
+}
+@keyframes fadeInLeft { from{opacity:0;transform:translateX(-50px);} to{opacity:1;transform:translateX(0);} }
+@keyframes fadeInRight { from{opacity:0;transform:translateX(50px);} to{opacity:1;transform:translateX(0);} }
 
-/* Анимации */
-@keyframes fadeInLeft { from {opacity:0; transform:translateX(-50px);} to {opacity:1; transform:translateX(0);} }
-@keyframes fadeInRight { from {opacity:0; transform:translateX(50px);} to {opacity:1; transform:translateX(0);} }
-
-/* Секции */
-.section { margin-top: 60px; background: rgba(255,255,255,0.05); padding: 40px; border-radius: 25px; box-shadow: 0 0 30px rgba(0,0,0,0.3); }
-.section h2 { text-align: center; margin-bottom: 30px; font-weight: 700; font-size: 32px; }
-
-/* Тексты */
-.text-block { font-size: 18px; line-height: 1.8; color: #e0e7ff; white-space: pre-line; }
-
-/* Галерея */
-.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
-.gallery-item img { width: 100%; border-radius: 10px; cursor: pointer; transition: transform 0.3s; }
-.gallery-item img:hover { transform: scale(1.05); }
-
-/* Видео */
-.video-block iframe { width: 100%; max-width: 980px; height: 533px; border-radius: 20px; margin-bottom: 25px; display: block; margin-left: auto; margin-right: auto; }
-
-/* Сыйлыктар */
-.achievement-item { background: rgba(255,255,255,0.1); padding: 15px 20px; border-radius: 15px; margin-bottom: 15px; font-size: 18px; }
-
-/* Footer */
+.section {
+    margin-top:60px; background: rgba(0,0,50,0.2); padding:40px;
+    border-radius:25px; box-shadow:0 0 30px rgba(0,0,0,0.3);
+}
+.section h2 { text-align:center; margin-bottom:30px; font-weight:700; font-size:32px; }
+.text-block { font-size:18px; line-height:1.8; color:#e0e7ff; white-space: pre-line; }
+.achievement-item {
+    background: rgba(0,0,100,0.3); padding:15px 20px; border-radius:15px;
+    margin-bottom:15px; font-size:18px;
+}
+.gallery {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:15px;
+}
+.gallery-item img { width:100%; border-radius:15px; cursor:pointer; transition:0.3s; }
+.gallery-item img:hover { transform:scale(1.05); }
+.video-block iframe {
+    width:100%; max-width:980px; height:533px; border-radius:20px; margin:25px auto; display:block;
+}
 .footer {
-    display:flex; justify-content:space-between; align-items:center;
-    padding:20px; background: rgba(0,0,0,0.6); border-radius: 20px; margin-top:50px;
+    text-align:center; margin-top:60px; color:#cbd5f5; display:flex; justify-content:center; align-items:center; gap:20px; position:relative;
 }
-.footer-center img { width:32px; opacity:0.5; border-radius:5px; }
-.footer span, .footer a { font-size:12px; color:#cbd5f5; text-decoration:none; }
+.footer img { width:30px; height:30px; }
+.footer .last-photo { width:50px; opacity:0.3; border-radius:10px; }
+
 </style>
 </head>
 <body>
@@ -94,7 +85,7 @@ body::before {
     <div class="hero-text">
         <h1>{{ bio.full_name }}</h1>
         {% if bio.quote %}
-            <p><em>{{ bio.quote }}</em></p>
+        <p><em>{{ bio.quote }}</em></p>
         {% endif %}
         <div class="hero-buttons">
             <button onclick="scrollToSection('achievements')">🏅 Сыйлыктар</button>
@@ -104,30 +95,27 @@ body::before {
         </div>
     </div>
     <div class="hero-photo">
-        {% if bio.main_photo %}
-            <img src="{{ bio.main_photo.url }}" alt="Photo">
-        {% endif %}
+        {% if bio.main_photo %}<img src="{{ bio.main_photo.url }}" alt="Photo">{% endif %}
     </div>
 </div>
 
-<!-- BIO + TEXTS + ACHIEVEMENTS -->
+<!-- BIO -->
 <div id="bio" class="section">
 <h2>Биография</h2>
-
-{% if first_text %}
-<p class="text-block">{{ first_text.text }}</p>
-{% endif %}
+{% if first_text %}<p class="text-block">{{ first_text.text }}</p>{% endif %}
 
 <!-- Сыйлыктар сразу после первого текста -->
-{% for a in achievements %}
-<div class="achievement-item">{{ a.text }}</div>
-{% endfor %}
+<div id="achievements">
+    {% for a in achievements %}
+    <div class="achievement-item">{{ a.text }}</div>
+    {% endfor %}
+</div>
 
-<!-- Остальные тексты -->
-{% for item in bio.items.all %}
-{% if item.item_type == "text" %}
-<p class="text-block">{{ item.text }}</p>
-{% endif %}
+<!-- Остальные тексты с админки после Сыйлыктар -->
+{% for item in remaining_items %}
+    {% if item.item_type == "text" %}
+    <p class="text-block">{{ item.text }}</p>
+    {% endif %}
 {% endfor %}
 </div>
 
@@ -135,69 +123,68 @@ body::before {
 <div id="gallery" class="section">
 <h2>Суроттор</h2>
 <div class="gallery">
-{% for item in bio.items.all %}
-{% if item.item_type == "photo" %}
-<div class="gallery-item">
-<a href="{{ item.image.url }}" data-lightbox="bio-gallery" data-title="{{ item.image_description }}">
-<img src="{{ item.image.url }}" alt="{{ item.image_description }}">
-</a>
-</div>
-{% endif %}
-{% endfor %}
+    {% for item in remaining_items %}
+        {% if item.item_type == "photo" %}
+        <div class="gallery-item">
+            <img src="{{ item.image.url }}" alt="{{ item.image_description }}" onclick="openGallery(this)">
+        </div>
+        {% endif %}
+    {% endfor %}
 </div>
 </div>
 
-<!-- VIDEOS -->
+<!-- ВИДЕО -->
 <div id="videos" class="section">
 <h2>Документалдуу тасмалар</h2>
-
 <div class="video-block">
-<iframe width="948" height="533" src="https://www.youtube.com/embed/LKQ63QN8-rM" title="Эргеш Төрөбаев 1" frameborder="0" allowfullscreen></iframe>
+<iframe width="948" height="533" src="https://www.youtube.com/embed/LKQ63QN8-rM" title="Эргеш Төрөбаев 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
-
 <div class="video-block">
-<iframe width="948" height="533" src="https://www.youtube.com/embed/MwP-roByXj8" title="Эргеш Төрөбаев 2" frameborder="0" allowfullscreen></iframe>
+<iframe width="948" height="533" src="https://www.youtube.com/embed/MwP-roByXj8" title="Эргеш Төрөбаев 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
-
 <div class="video-block">
-<iframe width="980" height="551" src="https://www.youtube.com/embed/Ig_g_GcXpys" title="Энергетикага өмүрүн арнаган Эргеш Төрөбаев" frameborder="0" allowfullscreen></iframe>
+<iframe width="980" height="551" src="https://www.youtube.com/embed/Ig_g_GcXpys" title="Энергетикага өмүрүн арнаган Эргеш Төрөбаев" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
-
 <div class="video-block">
-<iframe width="948" height="533" src="https://www.youtube.com/embed/0YU9TMKl1HI" title="АТАЙЫН ЧЫГАРЫЛЫШ" frameborder="0" allowfullscreen></iframe>
+<iframe width="948" height="533" src="https://www.youtube.com/embed/0YU9TMKl1HI" title="АТАЙЫН ЧЫГАРЫЛЫШ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
-
 <div class="video-block">
-<iframe width="980" height="551" src="https://www.youtube.com/embed/QzWjtXIF4fY" title="Өрнөктүү өмүр" frameborder="0" allowfullscreen></iframe>
+<iframe width="980" height="551" src="https://www.youtube.com/embed/QzWjtXIF4fY" title="Өрнөктүү өмүр" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
 </div>
 
 <!-- FOOTER -->
 <div class="footer">
-<div style="display:flex; align-items:center; gap:5px;">
-<img src="{% static 'images/whatsapp.png' %}" alt="WhatsApp" style="width:24px;">
-<span>Уеб баракча заказ кылуу үчүн +996 999 01 11 66</span>
-</div>
-
-<div class="footer-center">
-{% with last_photo=bio.items.all|dictsort:"id"|last %}
-{% if last_photo.item_type == "photo" %}
-<img src="{{ last_photo.image.url }}" alt="Логотип компании">
+<a href="https://wa.me/996999011166" target="_blank"><img src="{% static 'wa_icon.png' %}" alt="WhatsApp"></a>
+{% if remaining_items|last and remaining_items|last.item_type == "photo" %}
+<img src="{{ remaining_items|last.image.url }}" class="last-photo" alt="Последняя Фото">
 {% endif %}
-{% endwith %}
-</div>
-
-<div style="display:flex; align-items:center; gap:5px;">
-<img src="{% static 'images/facebook.png' %}" alt="Facebook" style="width:24px;">
-<a href="https://www.facebook.com/100013104250618/">Страница Facebook</a>
-</div>
+<a href="https://www.facebook.com/100013104250618/" target="_blank"><img src="{% static 'fb_icon.png' %}" alt="Facebook"></a>
+<p style="font-size:12px; margin-left:10px;">Веб баракча заказ кылуу үчүн</p>
 </div>
 
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
 <script>
 function scrollToSection(id){ document.getElementById(id).scrollIntoView({behavior:"smooth"}); }
+
+/* Галерея - открыть фото */
+function openGallery(img){
+    const overlay = document.createElement('div');
+    overlay.style.position='fixed'; overlay.style.top='0'; overlay.style.left='0';
+    overlay.style.width='100%'; overlay.style.height='100%';
+    overlay.style.background='rgba(0,0,0,0.8)'; overlay.style.display='flex';
+    overlay.style.alignItems='center'; overlay.style.justifyContent='center';
+    overlay.style.cursor='pointer';
+    overlay.onclick = ()=>overlay.remove();
+
+    const newImg = document.createElement('img');
+    newImg.src = img.src; newImg.style.maxWidth='90%'; newImg.style.maxHeight='90%';
+    newImg.style.borderRadius='20px';
+    overlay.appendChild(newImg);
+
+    document.body.appendChild(overlay);
+}
 </script>
 </body>
 </html>
