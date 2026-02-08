@@ -10,9 +10,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # ================= SECURITY =================
-SECRET_KEY = os.environ.get("SECRET_KEY")
-if not SECRET_KEY:
-    raise Exception("SECRET_KEY environment variable not set!")
+SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
+
 
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
