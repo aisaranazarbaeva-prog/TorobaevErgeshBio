@@ -6,17 +6,19 @@
 <title>{{ bio.full_name }}</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
+<!-- Lightbox CSS -->
+<link href="{% static 'lightbox2/css/lightbox.min.css' %}" rel="stylesheet">
+
 <style>
 body {
     margin: 0;
     font-family: "Inter", sans-serif;
-    background: linear-gradient(180deg, #0f172a, #1e3a8a);
+    background: linear-gradient(180deg, #0b1230, #1e3a8a);
     color: white;
     overflow-x: hidden;
     position: relative;
 }
 
-/* Фоновый узор */
 body::before {
     content: "";
     position: absolute;
@@ -26,6 +28,13 @@ body::before {
     opacity: 0.05;
     pointer-events: none;
     z-index: 0;
+    animation: pulse 15s linear infinite;
+}
+
+@keyframes pulse {
+    0% {opacity:0.03;}
+    50% {opacity:0.08;}
+    100% {opacity:0.03;}
 }
 
 .container {
@@ -36,130 +45,40 @@ body::before {
     z-index: 1;
 }
 
-/* HERO */
-.hero {
-    display: flex;
-    gap: 40px;
-    align-items: center;
-    justify-content: space-between;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-    border-radius: 30px;
-    padding: 50px;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
-}
-
-.hero-text {
-    max-width: 600px;
-    animation: fadeInLeft 1.5s ease;
-}
-
-.hero-text h1 {
-    font-size: 48px;
-    margin-bottom: 10px;
-}
-
-.hero-text p {
-    font-size: 20px;
-    line-height: 1.6;
-    margin-bottom: 25px;
-}
-
-.hero-buttons button {
-    margin-right: 15px;
-    margin-top: 10px;
-    padding: 12px 24px;
-    border-radius: 20px;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    background: #60a5fa;
-    color: white;
-    transition: 0.3s;
-}
-
-.hero-buttons button:hover {
-    background: #93c5fd;
-    transform: scale(1.05);
-}
-
-.hero-photo img {
-    width: 320px;
-    border-radius: 25px;
-    box-shadow: 0 0 40px rgba(0,0,0,0.4);
-    animation: fadeInRight 1.5s ease;
-}
-
 /* Секции */
-.section {
-    margin-top: 60px;
-    background: rgba(255,255,255,0.05);
-    padding: 40px;
-    border-radius: 25px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.3);
-}
+.section { margin-top: 60px; background: rgba(255,255,255,0.05); padding: 40px; border-radius: 25px; box-shadow: 0 0 30px rgba(0,0,0,0.3); }
+.section h2 { text-align: center; margin-bottom: 30px; color: #cbe2ff; }
 
-.section h2 {
-    text-align: center;
-    margin-bottom: 30px;
-}
+/* Тексты */
+.text-block { font-size: 18px; line-height: 1.8; color: #e0e7ff; white-space: pre-line; }
 
-/* Текст */
-.text-block {
-    font-size: 18px;
-    line-height: 1.8;
-    color: #e0e7ff;
-    white-space: pre-line;
-}
-
-/* Суроттор */
+/* Галерея */
 .gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
 }
-
 .gallery-item img {
     width: 100%;
-    border-radius: 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
-
-.gallery-item .desc {
-    font-size: 14px;
-    text-align: center;
-    color: #cbd5f5;
-    margin-top: 5px;
+.gallery-item img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0,123,255,0.5);
 }
 
 /* Видео */
-.video-block iframe {
-    width: 100%;
-    height: 533px;
-    border-radius: 20px;
-    margin-bottom: 25px;
-}
+.video-block iframe { width: 100%; height: 533px; border-radius: 20px; margin-bottom: 25px; box-shadow: 0 0 40px rgba(0,123,255,0.5); }
 
-/* Сыйлыктар */
-.achievement-item {
-    background: rgba(255,255,255,0.2);
-    padding: 15px 20px;
-    border-radius: 15px;
-    margin-bottom: 15px;
-}
+/* Достижения */
+.achievement-item { background: rgba(255,255,255,0.2); padding: 15px 20px; border-radius: 15px; margin-bottom: 15px; }
 
-/* Footer реклама */
-.footer {
-    text-align: center;
-    margin-top: 60px;
-    color: #cbd5f5;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-}
-.footer a {
-    color: #60a5fa;
-    text-decoration: none;
-}
+/* Footer */
+.footer { display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-top: 60px; color: #cbd5f5; }
+.footer a { color: #60a5fa; text-decoration: none; display: flex; align-items: center; gap:5px; }
+.footer img { width:16px; height:16px; }
 </style>
 </head>
 <body>
@@ -190,11 +109,15 @@ body::before {
 <!-- BIO -->
 <div id="bio" class="section">
 <h2>Биография</h2>
-{% for item in bio.items.all %}
-    {% if item.item_type == "text" %}
-        <p class="text-block">{{ item.text }}</p>
+{% with bio.items.all|dictsort:"id" as sorted_items %}
+    {% if sorted_items %}
+        {% with first_item=sorted_items.0 %}
+            {% if first_item.item_type == "text" %}
+                <p class="text-block">{{ first_item.text }}</p>
+            {% endif %}
+        {% endwith %}
     {% endif %}
-{% endfor %}
+{% endwith %}
 </div>
 
 <!-- ACHIEVEMENTS -->
@@ -205,17 +128,25 @@ body::before {
 {% endfor %}
 </div>
 
-<!-- SURОTTOR -->
+<!-- Остальные тексты -->
+<div class="section">
+{% for item in bio.items.all %}
+    {% if item.item_type == "text" and not forloop.first %}
+        <p class="text-block">{{ item.text }}</p>
+    {% endif %}
+{% endfor %}
+</div>
+
+<!-- Суроттор с лайтбокс -->
 <div id="gallery" class="section">
 <h2>Суроттор</h2>
 <div class="gallery">
 {% for item in bio.items.all %}
     {% if item.item_type == "photo" %}
     <div class="gallery-item">
-        <img src="{{ item.image.url }}" alt="{{ item.image_description }}">
-        {% if item.image_description %}
-        <div class="desc">{{ item.image_description }}</div>
-        {% endif %}
+        <a href="{{ item.image.url }}" data-lightbox="bio-gallery" data-title="{{ item.image_description }}">
+            <img src="{{ item.image.url }}" alt="{{ item.image_description }}">
+        </a>
     </div>
     {% endif %}
 {% endfor %}
@@ -227,35 +158,33 @@ body::before {
 <h2>Документалдуу тасмалар</h2>
 
 <div class="video-block">
-<iframe width="948" height="533" src="https://www.youtube.com/embed/LKQ63QN8-rM" title="Эргеш Төрөбаев тууралуу документалдуу фильм:: 1-бөлүм" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="948" height="533" src="https://www.youtube.com/embed/LKQ63QN8-rM" frameborder="0" allowfullscreen></iframe>
 </div>
-
 <div class="video-block">
-<iframe width="948" height="533" src="https://www.youtube.com/embed/MwP-roByXj8" title="Эргеш Төрөбаев тууралуу документалдуу фильм:: 2-бөлүм" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="948" height="533" src="https://www.youtube.com/embed/MwP-roByXj8" frameborder="0" allowfullscreen></iframe>
 </div>
-
 <div class="video-block">
-<iframe width="980" height="551" src="https://www.youtube.com/embed/Ig_g_GcXpys" title="Энергетикага өмүрүн арнаган Эргеш Төрөбаев" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="980" height="551" src="https://www.youtube.com/embed/Ig_g_GcXpys" frameborder="0" allowfullscreen></iframe>
 </div>
-
 <div class="video-block">
-<iframe width="948" height="533" src="https://www.youtube.com/embed/0YU9TMKl1HI" title="АТАЙЫН ЧЫГАРЫЛЫШ: КР ЭМГЕК СИҢИРГЕН ЭНЕРГЕТИГИ ЭРГЕШ ТӨРӨБАЕВ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="948" height="533" src="https://www.youtube.com/embed/0YU9TMKl1HI" frameborder="0" allowfullscreen></iframe>
 </div>
-
 <div class="video-block">
-<iframe width="980" height="551" src="https://www.youtube.com/embed/QzWjtXIF4fY" title="Өрнөктүү өмүр: Эргеш Төрөбаевдин энергетикадагы эмгеги" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="980" height="551" src="https://www.youtube.com/embed/QzWjtXIF4fY" frameborder="0" allowfullscreen></iframe>
 </div>
 
 </div>
 
 <!-- FOOTER -->
 <div class="footer">
-<div>📱 <a href="https://wa.me/999011166">Уеб баракча заказ кылуу үчүн</a></div>
-<div>📘 <a href="https://facebook.com/">Страница Facebook</a></div>
+<div>📱 <img src="{% static 'images/whatsapp.png' %}" alt="WhatsApp"> <a href="https://wa.me/999011166">Уеб баракча заказ кылуу үчүн</a></div>
+<div>📘 <img src="{% static 'images/facebook.png' %}" alt="Facebook"> <a href="https://facebook.com/">Страница Facebook</a></div>
 </div>
 
 </div>
 
+<!-- Скрипт Lightbox -->
+<script src="{% static 'lightbox2/js/lightbox.min.js' %}"></script>
 <script>
 function scrollToSection(id){
     document.getElementById(id).scrollIntoView({behavior:"smooth"});
