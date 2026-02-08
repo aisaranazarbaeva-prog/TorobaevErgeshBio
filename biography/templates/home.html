@@ -7,18 +7,34 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-/* === Общие стили === */
 body {
     margin: 0;
     font-family: "Inter", sans-serif;
-    background: linear-gradient(180deg, #0f172a, #1e3a8a);
+    background: #0f172a;
     color: white;
     overflow-x: hidden;
-    background-image: url("{% static 'images/blue-pattern.png' %}");
-    background-repeat: repeat;
-    background-size: contain;
+    position: relative;
 }
 
+/* Футуристический фон с градиентом и свечением */
+body::before {
+    content: "";
+    position: fixed;
+    top:0; left:0; width:100%; height:100%;
+    background: linear-gradient(180deg, rgba(15,23,42,0.9), rgba(30,58,138,0.9));
+    z-index: -3;
+}
+
+body::after {
+    content:"";
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    background-image: url("{% static 'patterns/hex_pattern.png' %}"); /* прозрачный узор */
+    background-repeat: repeat;
+    opacity: 0.1;
+    z-index: -2;
+}
+
+/* Контейнер */
 .container {
     max-width: 1200px;
     margin: auto;
@@ -34,7 +50,7 @@ body {
     background: linear-gradient(135deg, #3b82f6, #2563eb);
     border-radius: 30px;
     padding: 50px;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.4);
 }
 
 .hero-text {
@@ -74,37 +90,30 @@ body {
 .hero-photo img {
     width: 320px;
     border-radius: 25px;
-    box-shadow: 0 0 40px rgba(0,0,0,0.4);
+    box-shadow: 0 0 50px rgba(0,255,255,0.3);
     animation: fadeInRight 1.5s ease;
 }
 
-/* Анимации */
-@keyframes fadeInLeft {
-    from {opacity:0; transform:translateX(-50px);}
-    to {opacity:1; transform:translateX(0);}
-}
-@keyframes fadeInRight {
-    from {opacity:0; transform:translateX(50px);}
-    to {opacity:1; transform:translateX(0);}
-}
+/* ANIMATIONS */
+@keyframes fadeInLeft {from {opacity:0; transform:translateX(-50px);} to {opacity:1; transform:translateX(0);}}
+@keyframes fadeInRight {from {opacity:0; transform:translateX(50px);} to {opacity:1; transform:translateX(0);}}
 
-/* Секции */
+/* SECTIONS */
 .section {
     margin-top: 60px;
-    background: rgba(255,255,255,0.05);
+    background: rgba(0,0,0,0.4);
     padding: 40px;
     border-radius: 25px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    box-shadow: 0 0 30px rgba(0,255,255,0.1);
 }
 
 .section h2 {
     text-align: center;
     margin-bottom: 30px;
-    font-size: 28px;
-    color: #cbd5f5;
+    color: #60a5fa;
 }
 
-/* Тексты */
+/* TEXT & IMAGE */
 .text-block {
     font-size: 18px;
     line-height: 1.8;
@@ -113,7 +122,29 @@ body {
     margin-bottom: 25px;
 }
 
-/* Галерея */
+.image-block img {
+    width: 100%;
+    border-radius: 20px;
+    margin-top: 20px;
+}
+
+.image-desc {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #cbd5f5;
+}
+
+/* VIDEO */
+.video-block iframe {
+    width: 100%;
+    max-width: 980px;
+    height: 550px;
+    border-radius: 20px;
+    margin: 25px auto;
+    display: block;
+}
+
+/* GALLERY */
 .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -132,15 +163,7 @@ body {
     margin-top: 5px;
 }
 
-/* Видео */
-.video-block iframe {
-    width: 100%;
-    height: 533px;
-    border-radius: 20px;
-    margin-bottom: 25px;
-}
-
-/* Сыйлыктар */
+/* ACHIEVEMENTS */
 .achievement-item {
     background: rgba(255,255,255,0.2);
     padding: 15px 20px;
@@ -148,15 +171,40 @@ body {
     margin-bottom: 15px;
 }
 
-/* Footer */
+/* FOOTER & REKLAMA */
 .footer {
     text-align: center;
     margin-top: 60px;
     color: #cbd5f5;
+    position: relative;
 }
+
+.reklama-left, .reklama-right {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #60a5fa;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    z-index: 10;
+}
+
+.reklama-left { left: 0; padding-left: 5px; }
+.reklama-right { right: 0; padding-right: 5px; }
+.reklama-left img, .reklama-right img { width: 20px; height: 20px; }
 </style>
 </head>
 <body>
+
+<div class="reklama-left">
+    <img src="{% static 'icons/facebook.png' %}" alt="FB"> Веб баракча заказ кылуу үчүн
+</div>
+<div class="reklama-right">
+    <img src="{% static 'icons/whatsapp.png' %}" alt="WA"> +996 999 01 11 66
+</div>
+
 <div class="container">
 
 <!-- HERO -->
@@ -170,7 +218,7 @@ body {
         <div class="hero-buttons">
             <button onclick="scrollToSection('bio')">📖 Биография</button>
             <button onclick="scrollToSection('achievements')">🏅 Сыйлыктар</button>
-            <button onclick="scrollToSection('photos')">🖼 Суроттор</button>
+            <button onclick="scrollToSection('gallery')">🖼 Суроттор</button>
             <button onclick="scrollToSection('videos')">🎬 Тасмалар</button>
         </div>
     </div>
@@ -185,59 +233,48 @@ body {
 <!-- BIO -->
 <div id="bio" class="section">
 <h2>Биография</h2>
-{% if first_text %}
-<p class="text-block">{{ first_text.text }}</p>
-{% endif %}
+{% for item in bio_items %}
+<p class="text-block">{{ item.text }}</p>
+{% endfor %}
+</div>
 
-<!-- Сыйлыктар сразу после первого текста -->
-{% if achievements %}
+<!-- ACHIEVEMENTS -->
+<div id="achievements" class="section">
 <h2>Сыйлыктар жана ордендер</h2>
 {% for a in achievements %}
 <div class="achievement-item">{{ a.text }}</div>
 {% endfor %}
-{% endif %}
-
-<!-- Остальные тексты -->
-{% for item in remaining_items %}
-    <p class="text-block">{{ item.text }}</p>
-{% endfor %}
 </div>
 
-<!-- Фотографии (Суроттор) -->
-<div id="photos" class="section">
+<!-- GALLERY -->
+<div id="gallery" class="section">
 <h2>Суроттор</h2>
 <div class="gallery">
-    {% for photo in bio.gallery_photos.all %}
-    <div class="gallery-item">
-        <img src="{{ photo.image.url }}" alt="{{ photo.description }}">
-        {% if photo.description %}
-        <div class="desc">{{ photo.description }}</div>
-        {% endif %}
-    </div>
-    {% endfor %}
-    {% if bio.gallery_photos.count == 0 %}
-    <p>Суроттор пока пуста.</p>
+{% for photo in gallery_photos %}
+<div class="gallery-item">
+    <img src="{{ photo.image.url }}" alt="{{ photo.description }}">
+    {% if photo.description %}
+    <div class="desc">{{ photo.description }}</div>
     {% endif %}
+</div>
+{% endfor %}
 </div>
 </div>
 
-<!-- Видео -->
+<!-- VIDEOS -->
 <div id="videos" class="section">
 <h2>Документалдуу тасмалар</h2>
 
-<iframe width="948" height="533" src="https://www.youtube.com/embed/LKQ63QN8-rM" title="Эргеш Төрөбаев тууралуу документалдуу фильм:: 1-бөлүм" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-<iframe width="948" height="533" src="https://www.youtube.com/embed/MwP-roByXj8" title="Эргеш Төрөбаев тууралуу документалдуу фильм:: 2-бөлүм" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-<iframe width="980" height="551" src="https://www.youtube.com/embed/Ig_g_GcXpys" title="Энергетикага өмүрүн арнаган Эргеш Төрөбаев" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-<iframe width="948" height="533" src="https://www.youtube.com/embed/0YU9TMKl1HI" title="АТАЙЫН ЧЫГАРЫЛЫШ: КР ЭМГЕК СИҢИРГЕН ЭНЕРГЕТИГИ ЭРГЕШ ТӨРӨБАЕВ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-<iframe width="980" height="551" src="https://www.youtube.com/embed/QzWjtXIF4fY" title="Өрнөктүү өмүр: Эргеш Төрөбаевдин энергетикадагы эмгеги" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/LKQ63QN8-rM" title="Эргеш Төрөбаев тууралуу документалдуу фильм:: 1-бөлүм" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/MwP-roByXj8" title="Эргеш Төрөбаев тууралуу документалдуу фильм:: 2-бөлүм" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/Ig_g_GcXpys" title="Энергетикага өмүрүн арнаган Эргеш Төрөбаев" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/BeFIQbDaoI0" title="Эргеш Торобаев мектеби" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/0YU9TMKl1HI" title="АТАЙЫН ЧЫГАРЫЛЫШ: КР ЭМГЕК СИҢИРГЕН ЭНЕРГЕТИГИ ЭРГЕШ ТӨРӨБАЕВ" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/QzWjtXIF4fY" title="Өрнөктүү өмүр: Эргеш Төрөбаевдин энергетикадагы эмгеги" frameborder="0" allowfullscreen></iframe>
 
 </div>
 
-<!-- Footer -->
+<!-- FOOTER -->
 <div class="footer">
 <p>Веб-баракча заказ кылуу үчүн: +996 999 01 11 66</p>
 </div>
