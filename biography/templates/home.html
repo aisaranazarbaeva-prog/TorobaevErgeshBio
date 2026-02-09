@@ -262,21 +262,38 @@ body::before {
 
 <!-- Footer -->
 <div class="footer">
-    <a href="https://wa.me/996999011166" target="_blank">
-        <img src="{% static 'wa_icon.png' %}" alt="WhatsApp">
-    </a>
 
-    {% comment %} Получаем последнюю фотографию из галереи {% endcomment %}
+    <!-- WhatsApp слева -->
+    <div class="footer-block">
+        <p class="footer-title">Веб-баракча заказ кылуу үчүн</p>
+        <a href="https://wa.me/996999011166" target="_blank" class="footer-link">
+            📞 +996 999 011 166
+        </a>
+    </div>
+
+    <!-- Логотип по центру -->
     {% with last_photo=remaining_items|last %}
         {% if last_photo.item_type == "photo" %}
-            <img src="{{ last_photo.image.url }}" class="last-photo" alt="Последняя Фото">
+            <img src="{{ last_photo.image.url }}" class="company-logo" alt="Компания логотиби">
         {% endif %}
     {% endwith %}
 
-    <a href="https://www.facebook.com/100013104250618/" target="_blank">
-        <img src="{% static 'fb_icon.png' %}" alt="Facebook">
-    </a>
+    <!-- Facebook + Instagram справа -->
+    <div class="footer-block">
+        <p class="footer-title">Дагы башка маалыматтар</p>
+
+        <a href="https://www.facebook.com/100013104250618/" target="_blank" class="footer-link">
+            📘 Facebook
+        </a>
+
+        <a href="https://www.instagram.com/jpes.kg?utm_source=qr&igsh=MWx4d2sxdHRqMjNybg=="
+           target="_blank" class="footer-link" style="margin-top:8px; display:block;">
+            📸 Instagram
+        </a>
+    </div>
+
 </div>
+
 
 
 <script>
