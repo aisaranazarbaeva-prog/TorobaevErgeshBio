@@ -271,7 +271,7 @@ body::before {
         </a>
     </div>
 
-    <!-- Логотип по центру -->
+    <!-- Логотип по центру большой -->
     {% with last_photo=remaining_items|last %}
         {% if last_photo.item_type == "photo" %}
             <img src="{{ last_photo.image.url }}" class="company-logo" alt="Компания логотиби">
@@ -282,11 +282,11 @@ body::before {
     <div class="footer-block">
         <p class="footer-title">Дагы башка маалыматтар</p>
         <a href="https://www.facebook.com/100013104250618/" target="_blank" class="footer-link">
-            📘 Facebook
+            Facebook
         </a>
         <a href="https://www.instagram.com/jpes.kg?utm_source=qr&igsh=MWx4d2sxdHRqMjNybg=="
            target="_blank" class="footer-link" style="margin-top:10px; display:block;">
-            📸 Instagram
+            Instagram
         </a>
     </div>
 
@@ -334,10 +334,10 @@ body::before {
     transform: scale(1.1);
 }
 
-/* Логотип по центру большой и яркий */
+/* Логотип по центру максимально большой */
 .company-logo {
-    width: 150px;
-    max-width: 25vw;
+    width: 70%;
+    max-width: 700px; /* чтобы не вышел за футер */
     opacity: 0.95;
     border-radius: 15px;
     box-shadow: 0 5px 25px rgba(0,0,0,0.4);
@@ -359,6 +359,8 @@ body::before {
     }
     .company-logo {
         margin: 20px 0;
+        width: 90%;
+        max-width: none;
     }
 }
 </style>
