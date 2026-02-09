@@ -1,3 +1,5 @@
+
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="ru">
@@ -77,28 +79,16 @@ body::before {
 .gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:15px; }
 .gallery-item img { width:100%; height:180px; object-fit:cover; border-radius:15px; cursor:pointer; transition:transform 0.3s ease; }
 .gallery-item img:hover { transform:scale(1.05); }
-
 #gallery-overlay {
     position:fixed; top:0; left:0; width:100%; height:100%;
     background:rgba(0,0,0,0.9); display:flex; flex-direction:column;
     align-items:center; justify-content:center; z-index:1000;
 }
-#gallery-overlay img {
-    max-width:90%;
-    max-height:80%;
-    border-radius:20px;
-    margin-bottom:20px;
-    animation: zoomIn 0.3s ease;
-}
-@keyframes zoomIn {
-    from { transform: scale(0.7); opacity:0; }
-    to { transform: scale(1); opacity:1; }
-}
+#gallery-overlay img { max-width:90%; max-height:80%; border-radius:20px; margin-bottom:20px; transition:transform 0.3s ease; }
 #gallery-overlay .controls { display:flex; gap:30px; }
 #gallery-overlay .controls button {
     padding:10px 20px; font-size:18px; border:none; border-radius:12px;
-    background:#60a5fa; color:white; cursor:pointer;
-    transition:transform 0.2s ease;
+    background:#60a5fa; color:white; cursor:pointer; transition:transform 0.2s ease;
 }
 #gallery-overlay .controls button:hover { transform:scale(1.1); }
 
@@ -120,9 +110,14 @@ body::before {
 .footer-logo-wrapper { flex:2; display:flex; justify-content:center; }
 .company-logo { height:120px; width:auto; opacity:0.95; border-radius:15px; box-shadow:0 5px 25px rgba(0,0,0,0.4); transition:transform 0.3s ease; }
 .company-logo:hover { transform:scale(1.05); }
+@media (max-width:900px) {
+    .footer { flex-direction:column; text-align:center; padding:40px 20px; }
+    .footer-block { margin-bottom:20px; }
+    .footer-logo-wrapper { margin:20px 0; }
+    .company-logo { height:100px; }
+}
 </style>
 </head>
-
 <body>
 <div class="container">
 
@@ -148,34 +143,27 @@ body::before {
 <!-- BIO -->
 <div id="bio" class="section">
 <h2>Биография</h2>
-
-{% for item in remaining_items %}
-    {% if item.item_type == "text" and forloop.first %}
-        <p class="text-block">{{ item.text }}</p>
-    {% endif %}
-{% endfor %}
-
+{% if first_text %}<p class="text-block">{{ first_text.text }}</p>{% endif %}
 <div id="achievements">
     {% for a in achievements %}
-        <div class="achievement-item">{{ a.text }}</div>
+    <div class="achievement-item">{{ a.text }}</div>
     {% endfor %}
 </div>
-
 {% for item in remaining_items %}
-    {% if item.item_type == "text" and not forloop.first %}
-        <p class="text-block">{{ item.text }}</p>
+    {% if item.item_type == "text" %}
+    <p class="text-block">{{ item.text }}</p>
     {% endif %}
 {% endfor %}
 </div>
 
-<!-- ГАЛЕРЕЯ -->
+<!-- Галерея -->
 <div id="gallery" class="section">
 <h2>Сүрөттөр</h2>
 <div class="gallery">
     {% for item in remaining_items %}
         {% if item.item_type == "photo" %}
         <div class="gallery-item">
-            <img src="{{ item.image.url }}" onclick="openGallery({{ forloop.counter0 }})">
+            <img src="{{ item.image.url }}" alt="{{ item.image_description }}" onclick="openGallery(this, {{ forloop.counter0 }})">
         </div>
         {% endif %}
     {% endfor %}
@@ -206,6 +194,7 @@ body::before {
 </div>
 
 </div>
+
 <!-- Footer -->
 <div class="footer">
     <div class="footer-block">
@@ -242,20 +231,20 @@ const galleryImages = [
 
 let currentIndex = 0;
 
-function openGallery(index) {
+function openGallery(img, index) {
     currentIndex = index;
-
     const overlay = document.createElement('div');
     overlay.id = 'gallery-overlay';
 
     const displayImg = document.createElement('img');
     displayImg.src = galleryImages[currentIndex];
+    overlay.appendChild(displayImg);
 
     const controls = document.createElement('div');
     controls.className = 'controls';
 
     const prevBtn = document.createElement('button');
-    prevBtn.innerText = '⬅ Артка';
+    prevBtn.textContent = '⬅ Артка';
     prevBtn.onclick = (e) => {
         e.stopPropagation();
         currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
@@ -263,7 +252,7 @@ function openGallery(index) {
     };
 
     const nextBtn = document.createElement('button');
-    nextBtn.innerText = 'Кийинки ➡';
+    nextBtn.textContent = 'Кийинки ➡';
     nextBtn.onclick = (e) => {
         e.stopPropagation();
         currentIndex = (currentIndex + 1) % galleryImages.length;
@@ -272,299 +261,12 @@ function openGallery(index) {
 
     controls.appendChild(prevBtn);
     controls.appendChild(nextBtn);
-
-    overlay.appendChild(displayImg);
     overlay.appendChild(controls);
 
     overlay.onclick = () => overlay.remove();
     document.body.appendChild(overlay);
 }
-
-document.addEventListener("keydown", function(e){
-    if(e.key === "Escape"){
-        const overlay = document.getElementById("gallery-overlay");
-        if(overlay) overlay.remove();
-    }
-});
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-<!--{% load static %}-->
-<!--<!DOCTYPE html>-->
-<!--<html lang="ru">-->
-<!--<head>-->
-<!--<meta charset="UTF-8">-->
-<!--<title>{{ bio.full_name }}</title>-->
-<!--<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">-->
-
-<!--<style>-->
-<!--body {-->
-<!--    margin: 0;-->
-<!--    font-family: "Inter", sans-serif;-->
-<!--    background: linear-gradient(180deg, #0f172a, #1e3a8a);-->
-<!--    color: white;-->
-<!--    overflow-x: hidden;-->
-<!--    position: relative;-->
-<!--}-->
-<!--body::before {-->
-<!--    content: "";-->
-<!--    position: fixed;-->
-<!--    top:0; left:0;-->
-<!--    width:100%; height:100%;-->
-<!--    background: radial-gradient(circle, rgba(96,165,250,0.05) 1px, transparent 1px);-->
-<!--    background-size: 40px 40px;-->
-<!--    z-index: -1;-->
-<!--}-->
-
-<!--.container { max-width: 1200px; margin: auto; padding: 60px 20px; }-->
-
-<!--/* HERO */-->
-<!--.hero {-->
-<!--    display:flex; gap:40px; align-items:center; justify-content:space-between;-->
-<!--    border-radius:30px; padding:50px;-->
-<!--    background: linear-gradient(135deg, #0c1f4a, #1e2e5b);-->
-<!--    box-shadow:0 15px 50px rgba(0,0,0,0.5);-->
-<!--    position: relative;-->
-<!--    overflow: hidden;-->
-<!--}-->
-<!--.hero::before {-->
-<!--    content: "";-->
-<!--    position: absolute;-->
-<!--    top: -50%;-->
-<!--    left: -50%;-->
-<!--    width: 200%;-->
-<!--    height: 200%;-->
-<!--    background: radial-gradient(circle, rgba(96,165,250,0.05) 1px, transparent 1px);-->
-<!--    background-size: 40px 40px;-->
-<!--    animation: patternMove 30s linear infinite;-->
-<!--    z-index: 0;-->
-<!--    pointer-events: none;-->
-<!--}-->
-<!--@keyframes patternMove { 0% {transform:rotate(0deg);} 100% {transform:rotate(360deg);} }-->
-
-<!--.hero-text { max-width:600px; z-index:1; animation: fadeInLeft 2s ease; }-->
-<!--.hero-text h1 { font-size:52px; margin-bottom:15px; color:#ffffff; text-shadow:0 2px 10px rgba(0,0,0,0.6);}-->
-<!--.hero-text p { font-size:22px; line-height:1.6; margin-bottom:30px; color:#cbd5f5; }-->
-<!--.hero-buttons button {-->
-<!--    margin-right:20px; margin-top:10px; padding:16px 30px; border-radius:25px;-->
-<!--    border:none; font-weight:700; font-size:18px; cursor:pointer;-->
-<!--    background:#3b82f6; color:white; transition:0.3s;-->
-<!--    box-shadow:0 5px 20px rgba(0,0,0,0.3);-->
-<!--}-->
-<!--.hero-buttons button:hover { background:#60a5fa; transform:scale(1.08); }-->
-
-<!--.hero-photo img { width:360px; border-radius:25px; box-shadow:0 0 50px rgba(0,0,0,0.5); animation:fadeInRight 2s ease; z-index:1; }-->
-
-<!--@keyframes fadeInLeft { from{opacity:0; transform:translateX(-50px);} to{opacity:1; transform:translateX(0);} }-->
-<!--@keyframes fadeInRight { from{opacity:0; transform:translateX(50px);} to{opacity:1; transform:translateX(0);} }-->
-
-<!--/* Общие секции */-->
-<!--.section { margin-top:60px; background: rgba(0,0,50,0.2); padding:40px; border-radius:25px; box-shadow:0 0 30px rgba(0,0,0,0.3);}-->
-<!--.section h2 { text-align:center; margin-bottom:30px; font-weight:700; font-size:32px;}-->
-<!--.text-block { font-size:18px; line-height:1.8; color:#e0e7ff; white-space: pre-line; }-->
-<!--.achievement-item { background: rgba(0,0,100,0.3); padding:15px 20px; border-radius:15px; margin-bottom:15px; font-size:18px; }-->
-
-<!--/* Галерея */-->
-<!--.gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:15px; }-->
-<!--.gallery-item img { width:100%; height:180px; object-fit:cover; border-radius:15px; cursor:pointer; transition:transform 0.3s ease; }-->
-<!--.gallery-item img:hover { transform:scale(1.05); }-->
-<!--#gallery-overlay {-->
-<!--    position:fixed; top:0; left:0; width:100%; height:100%;-->
-<!--    background:rgba(0,0,0,0.9); display:flex; flex-direction:column;-->
-<!--    align-items:center; justify-content:center; z-index:1000;-->
-<!--}-->
-<!--#gallery-overlay img { max-width:90%; max-height:80%; border-radius:20px; margin-bottom:20px; transition:transform 0.3s ease; }-->
-<!--#gallery-overlay .controls { display:flex; gap:30px; }-->
-<!--#gallery-overlay .controls button {-->
-<!--    padding:10px 20px; font-size:18px; border:none; border-radius:12px;-->
-<!--    background:#60a5fa; color:white; cursor:pointer; transition:transform 0.2s ease;-->
-<!--}-->
-<!--#gallery-overlay .controls button:hover { transform:scale(1.1); }-->
-
-<!--/* Видео */-->
-<!--.video-block iframe { width:100%; max-width:980px; height:533px; border-radius:20px; margin:25px auto; display:block; }-->
-
-<!--/* Футер */-->
-<!--.footer {-->
-<!--    margin-top:60px; padding:50px 20px;-->
-<!--    display:flex; justify-content:space-between; align-items:center;-->
-<!--    background:linear-gradient(135deg, #1e3a8a, #0f172a);-->
-<!--    border-radius:20px; box-shadow:0 10px 40px rgba(0,0,0,0.5);-->
-<!--    flex-wrap:wrap;-->
-<!--}-->
-<!--.footer-block { text-align:center; flex:1; min-width:150px; }-->
-<!--.footer-title { font-weight:700; margin-bottom:12px; color:#a5b4fc; font-size:16px; }-->
-<!--.footer-link { display:inline-block; font-size:18px; font-weight:600; color:#60a5fa; text-decoration:none; transition:all 0.3s ease; }-->
-<!--.footer-link:hover { color:#ffffff; transform:scale(1.1); }-->
-<!--.footer-logo-wrapper { flex:2; display:flex; justify-content:center; }-->
-<!--.company-logo { height:120px; width:auto; opacity:0.95; border-radius:15px; box-shadow:0 5px 25px rgba(0,0,0,0.4); transition:transform 0.3s ease; }-->
-<!--.company-logo:hover { transform:scale(1.05); }-->
-<!--@media (max-width:900px) {-->
-<!--    .footer { flex-direction:column; text-align:center; padding:40px 20px; }-->
-<!--    .footer-block { margin-bottom:20px; }-->
-<!--    .footer-logo-wrapper { margin:20px 0; }-->
-<!--    .company-logo { height:100px; }-->
-<!--}-->
-<!--</style>-->
-<!--</head>-->
-<!--<body>-->
-<!--<div class="container">-->
-
-<!--&lt;!&ndash; HERO &ndash;&gt;-->
-<!--<div class="hero">-->
-<!--    <div class="hero-text">-->
-<!--        <h1>{{ bio.full_name }}</h1>-->
-<!--        {% if bio.quote %}<p><em>{{ bio.quote }}</em></p>{% endif %}-->
-<!--        <div class="hero-buttons">-->
-<!--            <button onclick="scrollToSection('achievements')">🏅 Сыйлыктар</button>-->
-<!--            <button onclick="scrollToSection('bio')">📖 Биография</button>-->
-<!--            <button onclick="scrollToSection('gallery')">🖼 Сүрөттөр</button>-->
-<!--            <button onclick="scrollToSection('videos')">🎬 Тасмалар</button>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div class="hero-photo">-->
-<!--        {% if bio.main_photo %}-->
-<!--            <img src="{{ bio.main_photo.url }}" alt="Photo">-->
-<!--        {% endif %}-->
-<!--    </div>-->
-<!--</div>-->
-
-<!--&lt;!&ndash; BIO &ndash;&gt;-->
-<!--<div id="bio" class="section">-->
-<!--<h2>Биография</h2>-->
-<!--{% if first_text %}<p class="text-block">{{ first_text.text }}</p>{% endif %}-->
-<!--<div id="achievements">-->
-<!--    {% for a in achievements %}-->
-<!--    <div class="achievement-item">{{ a.text }}</div>-->
-<!--    {% endfor %}-->
-<!--</div>-->
-<!--{% for item in remaining_items %}-->
-<!--    {% if item.item_type == "text" %}-->
-<!--    <p class="text-block">{{ item.text }}</p>-->
-<!--    {% endif %}-->
-<!--{% endfor %}-->
-<!--</div>-->
-
-<!--&lt;!&ndash; Галерея &ndash;&gt;-->
-<!--<div id="gallery" class="section">-->
-<!--<h2>Сүрөттөр</h2>-->
-<!--<div class="gallery">-->
-<!--    {% for item in remaining_items %}-->
-<!--        {% if item.item_type == "photo" %}-->
-<!--        <div class="gallery-item">-->
-<!--            <img src="{{ item.image.url }}" alt="{{ item.image_description }}" onclick="openGallery(this, {{ forloop.counter0 }})">-->
-<!--        </div>-->
-<!--        {% endif %}-->
-<!--    {% endfor %}-->
-<!--</div>-->
-<!--</div>-->
-
-<!--&lt;!&ndash; VIDEOS &ndash;&gt;-->
-<!--<div id="videos" class="section">-->
-<!--<h2>Документалдуу тасмалар</h2>-->
-<!--<div class="video-block">-->
-<!--<iframe width="948" height="533" src="https://www.youtube.com/embed/LKQ63QN8-rM" title="Эргеш Төрөбаев тууралуу документалдуу фильм:: 1-бөлүм" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>-->
-<!--</div>-->
-
-<!--<div class="video-block">-->
-<!--<iframe width="948" height="533" src="https://www.youtube.com/embed/MwP-roByXj8" title="Эргеш Төрөбаев тууралуу документалдуу фильм:: 2-бөлүм" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>-->
-<!--</div>-->
-
-<!--<div class="video-block">-->
-<!--<iframe width="980" height="551" src="https://www.youtube.com/embed/Ig_g_GcXpys" title="Энергетикага өмүрүн арнаган Эргеш Төрөбаев" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>-->
-<!--</div>-->
-
-<!--<div class="video-block">-->
-<!--<iframe width="948" height="533" src="https://www.youtube.com/embed/0YU9TMKl1HI" title="АТАЙЫН ЧЫГАРЫЛЫШ: КР ЭМГЕК СИҢИРГЕН ЭНЕРГЕТИГИ ЭРГЕШ ТӨРӨБАЕВ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>-->
-<!--</div>-->
-
-<!--<div class="video-block">-->
-<!--<iframe width="980" height="551" src="https://www.youtube.com/embed/QzWjtXIF4fY" title="Өрнөктүү өмүр: Эргеш Төрөбаевдин энергетикадагы эмгеги" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>-->
-<!--</div>-->
-
-<!--</div>-->
-
-<!--&lt;!&ndash; Footer &ndash;&gt;-->
-<!--<div class="footer">-->
-<!--    <div class="footer-block">-->
-<!--        <p class="footer-title">Веб-баракча заказ кылуу үчүн</p>-->
-<!--        <a href="https://wa.me/996999011166" target="_blank" class="footer-link">📞 +996 999 011 166</a>-->
-<!--    </div>-->
-<!--    <div class="footer-logo-wrapper">-->
-<!--        {% with last_photo=remaining_items|last %}-->
-<!--            {% if last_photo.item_type == "photo" %}-->
-<!--                <img src="{{ last_photo.image.url }}" class="company-logo" alt="Компания логотиби">-->
-<!--            {% endif %}-->
-<!--        {% endwith %}-->
-<!--    </div>-->
-<!--    <div class="footer-block">-->
-<!--        <p class="footer-title">Дагы башка маалыматтар</p>-->
-<!--        <a href="https://www.facebook.com/100013104250618/" target="_blank" class="footer-link">📘 Facebook</a>-->
-<!--        <a href="https://www.instagram.com/jpes.kg?utm_source=qr" target="_blank" class="footer-link" style="margin-top:10px; display:block;">📸 Instagram</a>-->
-<!--    </div>-->
-<!--</div>-->
-
-<!--<script>-->
-<!--function scrollToSection(id) {-->
-<!--    const el = document.getElementById(id);-->
-<!--    if(el) el.scrollIntoView({behavior:"smooth"});-->
-<!--}-->
-
-<!--const galleryImages = [-->
-<!--    {% for item in remaining_items %}-->
-<!--        {% if item.item_type == "photo" %}-->
-<!--            "{{ item.image.url }}"{% if not forloop.last %},{% endif %}-->
-<!--        {% endif %}-->
-<!--    {% endfor %}-->
-<!--];-->
-
-<!--let currentIndex = 0;-->
-
-<!--function openGallery(img, index) {-->
-<!--    currentIndex = index;-->
-<!--    const overlay = document.createElement('div');-->
-<!--    overlay.id = 'gallery-overlay';-->
-
-<!--    const displayImg = document.createElement('img');-->
-<!--    displayImg.src = galleryImages[currentIndex];-->
-<!--    overlay.appendChild(displayImg);-->
-
-<!--    const controls = document.createElement('div');-->
-<!--    controls.className = 'controls';-->
-
-<!--    const prevBtn = document.createElement('button');-->
-<!--    prevBtn.textContent = '⬅ Артка';-->
-<!--    prevBtn.onclick = (e) => {-->
-<!--        e.stopPropagation();-->
-<!--        currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;-->
-<!--        displayImg.src = galleryImages[currentIndex];-->
-<!--    };-->
-
-<!--    const nextBtn = document.createElement('button');-->
-<!--    nextBtn.textContent = 'Кийинки ➡';-->
-<!--    nextBtn.onclick = (e) => {-->
-<!--        e.stopPropagation();-->
-<!--        currentIndex = (currentIndex + 1) % galleryImages.length;-->
-<!--        displayImg.src = galleryImages[currentIndex];-->
-<!--    };-->
-
-<!--    controls.appendChild(prevBtn);-->
-<!--    controls.appendChild(nextBtn);-->
-<!--    overlay.appendChild(controls);-->
-
-<!--    overlay.onclick = () => overlay.remove();-->
-<!--    document.body.appendChild(overlay);-->
-<!--}-->
-<!--</script>-->
-
-<!--</body>-->
-<!--</html>-->
