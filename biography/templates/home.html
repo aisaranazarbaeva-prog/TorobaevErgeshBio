@@ -272,21 +272,22 @@ body::before {
     </div>
 
     <!-- Логотип по центру большой -->
-    {% with last_photo=remaining_items|last %}
-        {% if last_photo.item_type == "photo" %}
-            <img src="{{ last_photo.image.url }}" class="company-logo" alt="Компания логотиби">
-        {% endif %}
-    {% endwith %}
+    <div class="footer-logo-wrapper">
+        {% with last_photo=remaining_items|last %}
+            {% if last_photo.item_type == "photo" %}
+                <img src="{{ last_photo.image.url }}" class="company-logo" alt="Компания логотиби">
+            {% endif %}
+        {% endwith %}
+    </div>
 
     <!-- Facebook + Instagram справа -->
     <div class="footer-block">
         <p class="footer-title">Дагы башка маалыматтар</p>
         <a href="https://www.facebook.com/100013104250618/" target="_blank" class="footer-link">
-            Facebook
+            📘 Facebook
         </a>
-        <a href="https://www.instagram.com/jpes.kg?utm_source=qr&igsh=MWx4d2sxdHRqMjNybg=="
-           target="_blank" class="footer-link" style="margin-top:10px; display:block;">
-            Instagram
+        <a href="https://www.instagram.com/jpes.kg?utm_source=qr&igsh=MWx4d2sxdHRqMjNybg==" target="_blank" class="footer-link" style="margin-top:10px; display:block;">
+            📸 Instagram
         </a>
     </div>
 
@@ -296,13 +297,13 @@ body::before {
 /* Премиум футер */
 .footer {
     margin-top: 60px;
-    padding: 40px 20px;
+    padding: 50px 20px; /* чуть больше высота футера */
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: linear-gradient(135deg, #1e3a8a, #0f172a);
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
     position: relative;
     flex-wrap: wrap;
 }
@@ -335,9 +336,15 @@ body::before {
 }
 
 /* Логотип по центру максимально большой */
+.footer-logo-wrapper {
+    flex: 2; /* занимает больше места по центру */
+    display: flex;
+    justify-content: center;
+}
+
 .company-logo {
-    width: 70%;
-    max-width: 700px; /* чтобы не вышел за футер */
+    height: 120px; /* высота большая, видно сразу */
+    width: auto;   /* сохраняем пропорции */
     opacity: 0.95;
     border-radius: 15px;
     box-shadow: 0 5px 25px rgba(0,0,0,0.4);
@@ -353,46 +360,151 @@ body::before {
     .footer {
         flex-direction: column;
         text-align: center;
+        padding: 40px 20px;
     }
     .footer-block {
         margin-bottom: 20px;
     }
+    .footer-logo-wrapper {
+        margin: 20px 0;
+    }
     .company-logo {
-    margin: 20px 0;
-    width: 100%;      /* увеличиваем ширину на всю доступную */
-    max-width: 800px; /* максимум для больших экранов */
-    opacity: 0.95;
-    border-radius: 15px;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.4);
-    transition: transform 0.3s ease;
+        height: 100px; /* чуть меньше на маленьких экранах */
+        width: auto;
+    }
 }
+</style>
 
-}
 </style>
 
 
 
 
+<!-- Галерея -->
+<div id="gallery" class="section">
+    <h2>Сүрөттөр</h2>
+    <div class="gallery">
+        {% for item in remaining_items %}
+            {% if item.item_type == "photo" %}
+            <div class="gallery-item">
+                <img src="{{ item.image.url }}" alt="{{ item.image_description }}" onclick="openGallery(this, {{ forloop.counter0 }})">
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+/* Галерея */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 180px; /* одинаковая высота для всех */
+    object-fit: cover;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item img:hover {
+    transform: scale(1.05);
+}
+
+/* Overlay для просмотра */
+#gallery-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    flex-direction: column;
+}
+
+#gallery-overlay img {
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+#gallery-overlay .controls {
+    display: flex;
+    gap: 30px;
+}
+
+#gallery-overlay .controls button {
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 12px;
+    background: #60a5fa;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+#gallery-overlay .controls button:hover {
+    transform: scale(1.1);
+}
+</style>
+
 <script>
-function scrollToSection(id){ document.getElementById(id).scrollIntoView({behavior:"smooth"}); }
+const galleryImages = [
+    {% for item in remaining_items %}
+        {% if item.item_type == "photo" %}
+            "{{ item.image.url }}",
+        {% endif %}
+    {% endfor %}
+];
 
-/* Галерея - открыть фото */
-function openGallery(img){
+let currentIndex = 0;
+
+function openGallery(img, index) {
+    currentIndex = index;
+
+    // Создаем overlay
     const overlay = document.createElement('div');
-    overlay.style.position='fixed'; overlay.style.top='0'; overlay.style.left='0';
-    overlay.style.width='100%'; overlay.style.height='100%';
-    overlay.style.background='rgba(0,0,0,0.8)'; overlay.style.display='flex';
-    overlay.style.alignItems='center'; overlay.style.justifyContent='center';
-    overlay.style.cursor='pointer';
-    overlay.onclick = ()=>overlay.remove();
+    overlay.id = 'gallery-overlay';
 
-    const newImg = document.createElement('img');
-    newImg.src = img.src; newImg.style.maxWidth='90%'; newImg.style.maxHeight='90%';
-    newImg.style.borderRadius='20px';
-    overlay.appendChild(newImg);
+    const displayImg = document.createElement('img');
+    displayImg.src = galleryImages[currentIndex];
+    overlay.appendChild(displayImg);
+
+    // Кнопки навигации
+    const controls = document.createElement('div');
+    controls.className = 'controls';
+
+    const prevBtn = document.createElement('button');
+    prevBtn.textContent = '⬅ Пред';
+    prevBtn.onclick = (e) => {
+        e.stopPropagation();
+        currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+        displayImg.src = galleryImages[currentIndex];
+    };
+
+    const nextBtn = document.createElement('button');
+    nextBtn.textContent = 'След ➡';
+    nextBtn.onclick = (e) => {
+        e.stopPropagation();
+        currentIndex = (currentIndex + 1) % galleryImages.length;
+        displayImg.src = galleryImages[currentIndex];
+    };
+
+    controls.appendChild(prevBtn);
+    controls.appendChild(nextBtn);
+    overlay.appendChild(controls);
+
+    overlay.onclick = () => overlay.remove();
 
     document.body.appendChild(overlay);
 }
 </script>
-</body>
-</html>
