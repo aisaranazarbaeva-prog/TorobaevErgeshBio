@@ -281,18 +281,88 @@ body::before {
     <!-- Facebook + Instagram справа -->
     <div class="footer-block">
         <p class="footer-title">Дагы башка маалыматтар</p>
-
         <a href="https://www.facebook.com/100013104250618/" target="_blank" class="footer-link">
             📘 Facebook
         </a>
-
         <a href="https://www.instagram.com/jpes.kg?utm_source=qr&igsh=MWx4d2sxdHRqMjNybg=="
-           target="_blank" class="footer-link" style="margin-top:8px; display:block;">
+           target="_blank" class="footer-link" style="margin-top:10px; display:block;">
             📸 Instagram
         </a>
     </div>
 
 </div>
+
+<style>
+/* Премиум футер */
+.footer {
+    margin-top: 60px;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #1e3a8a, #0f172a);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    position: relative;
+    flex-wrap: wrap;
+}
+
+.footer-block {
+    text-align: center;
+    flex: 1;
+    min-width: 150px;
+}
+
+.footer-title {
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #a5b4fc;
+    font-size: 16px;
+}
+
+.footer-link {
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 600;
+    color: #60a5fa;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.footer-link:hover {
+    color: #ffffff;
+    transform: scale(1.1);
+}
+
+/* Логотип по центру большой и яркий */
+.company-logo {
+    width: 150px;
+    max-width: 25vw;
+    opacity: 0.95;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease;
+}
+
+.company-logo:hover {
+    transform: scale(1.05);
+}
+
+/* Адаптация под мобильные */
+@media (max-width: 900px) {
+    .footer {
+        flex-direction: column;
+        text-align: center;
+    }
+    .footer-block {
+        margin-bottom: 20px;
+    }
+    .company-logo {
+        margin: 20px 0;
+    }
+}
+</style>
+
 
 
 
