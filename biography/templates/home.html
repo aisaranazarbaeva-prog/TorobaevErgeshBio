@@ -358,10 +358,15 @@ body::before {
         margin-bottom: 20px;
     }
     .company-logo {
-        margin: 90px 0;
-        width: 90%;
-        max-width: none;
-    }
+    margin: 20px 0;
+    width: 100%;      /* увеличиваем ширину на всю доступную */
+    max-width: 800px; /* максимум для больших экранов */
+    opacity: 0.95;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease;
+}
+
 }
 </style>
 
