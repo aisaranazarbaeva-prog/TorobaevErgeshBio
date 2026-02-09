@@ -24,98 +24,18 @@ body::before {
     background-size: 40px 40px;
     z-index: -1;
 }
-.container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 60px 20px;
-}
+
+.container { max-width: 1200px; margin: auto; padding: 60px 20px; }
+
+/* HERO */
 .hero {
     display:flex; gap:40px; align-items:center; justify-content:space-between;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-    border-radius:30px; padding:50px; box-shadow:0 15px 50px rgba(0,0,0,0.4);
-}
-.hero-text { max-width:600px; animation: fadeInLeft 1.5s ease; }
-.hero-text h1 { font-size:48px; margin-bottom:10px; }
-.hero-text p { font-size:20px; line-height:1.6; margin-bottom:25px; }
-.hero-buttons button {
-    margin-right:15px; margin-top:10px;
-    padding:12px 24px; border-radius:20px; border:none;
-    font-weight:600; cursor:pointer; background:#60a5fa; color:white;
-    transition:0.3s;
-}
-.hero-buttons button:hover { background:#93c5fd; transform:scale(1.05); }
-.hero-photo img {
-    width:320px; border-radius:25px; box-shadow:0 0 50px rgba(0,0,0,0.5);
-    animation: fadeInRight 1.5s ease;
-}
-@keyframes fadeInLeft { from{opacity:0;transform:translateX(-50px);} to{opacity:1;transform:translateX(0);} }
-@keyframes fadeInRight { from{opacity:0;transform:translateX(50px);} to{opacity:1;transform:translateX(0);} }
-
-.section {
-    margin-top:60px; background: rgba(0,0,50,0.2); padding:40px;
-    border-radius:25px; box-shadow:0 0 30px rgba(0,0,0,0.3);
-}
-.section h2 { text-align:center; margin-bottom:30px; font-weight:700; font-size:32px; }
-.text-block { font-size:18px; line-height:1.8; color:#e0e7ff; white-space: pre-line; }
-.achievement-item {
-    background: rgba(0,0,100,0.3); padding:15px 20px; border-radius:15px;
-    margin-bottom:15px; font-size:18px;
-}
-.gallery {
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:15px;
-}
-.gallery-item img { width:100%; border-radius:15px; cursor:pointer; transition:0.3s; }
-.gallery-item img:hover { transform:scale(1.05); }
-.video-block iframe {
-    width:100%; max-width:980px; height:533px; border-radius:20px; margin:25px auto; display:block;
-}
-.footer {
-    text-align:center; margin-top:60px; color:#cbd5f5; display:flex; justify-content:center; align-items:center; gap:20px; position:relative;
-}
-.footer img { width:30px; height:30px; }
-.footer .last-photo { width:50px; opacity:0.3; border-radius:10px; }
-
-</style>
-</head>
-<body>
-<div class="container">
-
-<!-- HERO -->
-<div class="hero">
-    <div class="hero-text">
-        <h1>{{ bio.full_name }}</h1>
-        {% if bio.quote %}
-        <p><em>{{ bio.quote }}</em></p>
-        {% endif %}
-        <div class="hero-buttons">
-            <button onclick="scrollToSection('achievements')">🏅 Сыйлыктар</button>
-            <button onclick="scrollToSection('bio')">📖 Биография</button>
-            <button onclick="scrollToSection('gallery')">🖼 Сүрөттөр</button>
-            <button onclick="scrollToSection('videos')">🎬 Тасмалар</button>
-        </div>
-    </div>
-    <div class="hero-photo">
-        {% if bio.main_photo %}
-        <img src="{{ bio.main_photo.url }}" alt="Photo">
-        {% endif %}
-    </div>
-</div>
-
-<style>
-/* === HERO Блок === */
-.hero {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 60px 40px;
-    border-radius: 30px;
+    border-radius:30px; padding:50px;
+    background: linear-gradient(135deg, #0c1f4a, #1e2e5b);
+    box-shadow:0 15px 50px rgba(0,0,0,0.5);
     position: relative;
     overflow: hidden;
-    background: linear-gradient(135deg, #0c1f4a, #1e2e5b);
-    box-shadow: 0 15px 50px rgba(0,0,0,0.5);
 }
-
-/* Прозрачные анимированные узоры */
 .hero::before {
     content: "";
     position: absolute;
@@ -129,91 +49,104 @@ body::before {
     z-index: 0;
     pointer-events: none;
 }
+@keyframes patternMove { 0% {transform:rotate(0deg);} 100% {transform:rotate(360deg);} }
 
-@keyframes patternMove {
-    0% { transform: rotate(0deg) translate(0,0); }
-    100% { transform: rotate(360deg) translate(0,0); }
-}
-
-/* Текст */
-.hero-text {
-    max-width: 600px;
-    position: relative;
-    z-index: 1;
-    animation: fadeInLeft 2s ease;
-}
-
-.hero-text h1 {
-    font-size: 52px;
-    margin-bottom: 15px;
-    color: #ffffff;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.6);
-}
-
-.hero-text p {
-    font-size: 22px;
-    line-height: 1.6;
-    margin-bottom: 30px;
-    color: #cbd5f5;
-}
-
-/* Крупные кнопки */
+.hero-text { max-width:600px; z-index:1; animation: fadeInLeft 2s ease; }
+.hero-text h1 { font-size:52px; margin-bottom:15px; color:#ffffff; text-shadow:0 2px 10px rgba(0,0,0,0.6);}
+.hero-text p { font-size:22px; line-height:1.6; margin-bottom:30px; color:#cbd5f5; }
 .hero-buttons button {
-    margin-right: 20px;
-    margin-top: 10px;
-    padding: 16px 30px;
-    border-radius: 25px;
-    border: none;
-    font-weight: 700;
-    font-size: 18px;
-    cursor: pointer;
-    background: #3b82f6;
-    color: white;
-    transition: 0.3s;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    margin-right:20px; margin-top:10px; padding:16px 30px; border-radius:25px;
+    border:none; font-weight:700; font-size:18px; cursor:pointer;
+    background:#3b82f6; color:white; transition:0.3s;
+    box-shadow:0 5px 20px rgba(0,0,0,0.3);
 }
+.hero-buttons button:hover { background:#60a5fa; transform:scale(1.08); }
 
-.hero-buttons button:hover {
-    background: #60a5fa;
-    transform: scale(1.08);
+.hero-photo img { width:360px; border-radius:25px; box-shadow:0 0 50px rgba(0,0,0,0.5); animation:fadeInRight 2s ease; z-index:1; }
+
+@keyframes fadeInLeft { from{opacity:0; transform:translateX(-50px);} to{opacity:1; transform:translateX(0);} }
+@keyframes fadeInRight { from{opacity:0; transform:translateX(50px);} to{opacity:1; transform:translateX(0);} }
+
+/* Общие секции */
+.section { margin-top:60px; background: rgba(0,0,50,0.2); padding:40px; border-radius:25px; box-shadow:0 0 30px rgba(0,0,0,0.3);}
+.section h2 { text-align:center; margin-bottom:30px; font-weight:700; font-size:32px;}
+.text-block { font-size:18px; line-height:1.8; color:#e0e7ff; white-space: pre-line; }
+.achievement-item { background: rgba(0,0,100,0.3); padding:15px 20px; border-radius:15px; margin-bottom:15px; font-size:18px; }
+
+/* Галерея */
+.gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:15px; }
+.gallery-item img { width:100%; height:180px; object-fit:cover; border-radius:15px; cursor:pointer; transition:transform 0.3s ease; }
+.gallery-item img:hover { transform:scale(1.05); }
+#gallery-overlay {
+    position:fixed; top:0; left:0; width:100%; height:100%;
+    background:rgba(0,0,0,0.9); display:flex; flex-direction:column;
+    align-items:center; justify-content:center; z-index:1000;
 }
-
-/* Фото */
-.hero-photo img {
-    width: 360px;
-    border-radius: 25px;
-    box-shadow: 0 0 50px rgba(0,0,0,0.5);
-    animation: fadeInRight 2s ease;
-    position: relative;
-    z-index: 1;
+#gallery-overlay img { max-width:90%; max-height:80%; border-radius:20px; margin-bottom:20px; transition:transform 0.3s ease; }
+#gallery-overlay .controls { display:flex; gap:30px; }
+#gallery-overlay .controls button {
+    padding:10px 20px; font-size:18px; border:none; border-radius:12px;
+    background:#60a5fa; color:white; cursor:pointer; transition:transform 0.2s ease;
 }
+#gallery-overlay .controls button:hover { transform:scale(1.1); }
 
-/* Анимации появления */
-@keyframes fadeInLeft {
-    from {opacity:0; transform:translateX(-50px);}
-    to {opacity:1; transform:translateX(0);}
+/* Видео */
+.video-block iframe { width:100%; max-width:980px; height:533px; border-radius:20px; margin:25px auto; display:block; }
+
+/* Футер */
+.footer {
+    margin-top:60px; padding:50px 20px;
+    display:flex; justify-content:space-between; align-items:center;
+    background:linear-gradient(135deg, #1e3a8a, #0f172a);
+    border-radius:20px; box-shadow:0 10px 40px rgba(0,0,0,0.5);
+    flex-wrap:wrap;
 }
-
-@keyframes fadeInRight {
-    from {opacity:0; transform:translateX(50px);}
-    to {opacity:1; transform:translateX(0);}
+.footer-block { text-align:center; flex:1; min-width:150px; }
+.footer-title { font-weight:700; margin-bottom:12px; color:#a5b4fc; font-size:16px; }
+.footer-link { display:inline-block; font-size:18px; font-weight:600; color:#60a5fa; text-decoration:none; transition:all 0.3s ease; }
+.footer-link:hover { color:#ffffff; transform:scale(1.1); }
+.footer-logo-wrapper { flex:2; display:flex; justify-content:center; }
+.company-logo { height:120px; width:auto; opacity:0.95; border-radius:15px; box-shadow:0 5px 25px rgba(0,0,0,0.4); transition:transform 0.3s ease; }
+.company-logo:hover { transform:scale(1.05); }
+@media (max-width:900px) {
+    .footer { flex-direction:column; text-align:center; padding:40px 20px; }
+    .footer-block { margin-bottom:20px; }
+    .footer-logo-wrapper { margin:20px 0; }
+    .company-logo { height:100px; }
 }
 </style>
+</head>
+<body>
+<div class="container">
 
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-text">
+        <h1>{{ bio.full_name }}</h1>
+        {% if bio.quote %}<p><em>{{ bio.quote }}</em></p>{% endif %}
+        <div class="hero-buttons">
+            <button onclick="scrollToSection('achievements')">🏅 Сыйлыктар</button>
+            <button onclick="scrollToSection('bio')">📖 Биография</button>
+            <button onclick="scrollToSection('gallery')">🖼 Сүрөттөр</button>
+            <button onclick="scrollToSection('videos')">🎬 Тасмалар</button>
+        </div>
+    </div>
+    <div class="hero-photo">
+        {% if bio.main_photo %}
+            <img src="{{ bio.main_photo.url }}" alt="Photo">
+        {% endif %}
+    </div>
+</div>
 
 <!-- BIO -->
 <div id="bio" class="section">
 <h2>Биография</h2>
 {% if first_text %}<p class="text-block">{{ first_text.text }}</p>{% endif %}
-
-<!-- Сыйлыктар сразу после первого текста -->
 <div id="achievements">
     {% for a in achievements %}
     <div class="achievement-item">{{ a.text }}</div>
     {% endfor %}
 </div>
-
-<!-- Остальные тексты с админки после Сыйлыктар -->
 {% for item in remaining_items %}
     {% if item.item_type == "text" %}
     <p class="text-block">{{ item.text }}</p>
@@ -221,140 +154,19 @@ body::before {
 {% endfor %}
 </div>
 
-<!-- ГАЛЕРЕЯ -->
+<!-- Галерея -->
 <div id="gallery" class="section">
-    <h2>Сүрөттөр</h2>
-    <div class="gallery">
-        {% for item in remaining_items %}
-            {% if item.item_type == "photo" %}
-            <div class="gallery-item">
-                <img src="{{ item.image.url }}" alt="{{ item.image_description }}" onclick="openGallery(this, {{ forloop.counter0 }})">
-            </div>
-            {% endif %}
-        {% endfor %}
-    </div>
-</div>
-
-<style>
-/* Галерея */
-.gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 15px;
-}
-
-.gallery-item img {
-    width: 100%;
-    height: 180px; /* одинаковая высота для всех */
-    object-fit: cover;
-    border-radius: 15px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.gallery-item img:hover {
-    transform: scale(1.05);
-}
-
-/* Overlay для просмотра */
-#gallery-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    flex-direction: column;
-}
-
-#gallery-overlay img {
-    max-width: 90%;
-    max-height: 80%;
-    border-radius: 20px;
-    margin-bottom: 20px;
-    transition: transform 0.3s ease;
-}
-
-#gallery-overlay .controls {
-    display: flex;
-    gap: 30px;
-}
-
-#gallery-overlay .controls button {
-    padding: 10px 20px;
-    font-size: 18px;
-    border: none;
-    border-radius: 12px;
-    background: #60a5fa;
-    color: white;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-#gallery-overlay .controls button:hover {
-    transform: scale(1.1);
-}
-</style>
-
-const galleryImages = [
+<h2>Сүрөттөр</h2>
+<div class="gallery">
     {% for item in remaining_items %}
         {% if item.item_type == "photo" %}
-            "{{ item.image.url }}"{% if not forloop.last %},{% endif %}
+        <div class="gallery-item">
+            <img src="{{ item.image.url }}" alt="{{ item.image_description }}" onclick="openGallery(this, {{ forloop.counter0 }})">
+        </div>
         {% endif %}
     {% endfor %}
-];
-
-
-let currentIndex = 0;
-
-function scrollToSection(id) {
-    const el = document.getElementById(id);
-    if(el) el.scrollIntoView({behavior:"smooth"});
-}
-
-function openGallery(img, index) {
-    currentIndex = index;
-
-    // Создаем overlay
-    const overlay = document.createElement('div');
-    overlay.id = 'gallery-overlay';
-
-    const displayImg = document.createElement('img');
-    displayImg.src = galleryImages[currentIndex];
-    overlay.appendChild(displayImg);
-
-    // Кнопки навигации
-    const controls = document.createElement('div');
-    controls.className = 'controls';
-
-    const prevBtn = document.createElement('button');
-    prevBtn.textContent = '⬅ Пред';
-    prevBtn.onclick = (e) => {
-        e.stopPropagation();
-        currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
-        displayImg.src = galleryImages[currentIndex];
-    };
-
-    const nextBtn = document.createElement('button');
-    nextBtn.textContent = 'След ➡';
-    nextBtn.onclick = (e) => {
-        e.stopPropagation();
-        currentIndex = (currentIndex + 1) % galleryImages.length;
-        displayImg.src = galleryImages[currentIndex];
-    };
-
-    controls.appendChild(prevBtn);
-    controls.appendChild(nextBtn);
-    overlay.appendChild(controls);
-
-    overlay.onclick = () => overlay.remove();
-
-    document.body.appendChild(overlay);
-}
-</script>
-
+</div>
+</div>
 
 <!-- VIDEOS -->
 <div id="videos" class="section">
@@ -383,16 +195,10 @@ function openGallery(img, index) {
 
 <!-- Footer -->
 <div class="footer">
-
-    <!-- WhatsApp слева -->
     <div class="footer-block">
         <p class="footer-title">Веб-баракча заказ кылуу үчүн</p>
-        <a href="https://wa.me/996999011166" target="_blank" class="footer-link">
-            📞 +996 999 011 166
-        </a>
+        <a href="https://wa.me/996999011166" target="_blank" class="footer-link">📞 +996 999 011 166</a>
     </div>
-
-    <!-- Логотип по центру большой -->
     <div class="footer-logo-wrapper">
         {% with last_photo=remaining_items|last %}
             {% if last_photo.item_type == "photo" %}
@@ -400,98 +206,65 @@ function openGallery(img, index) {
             {% endif %}
         {% endwith %}
     </div>
-
-    <!-- Facebook + Instagram справа -->
     <div class="footer-block">
         <p class="footer-title">Дагы башка маалыматтар</p>
-        <a href="https://www.facebook.com/100013104250618/" target="_blank" class="footer-link">
-            📘 Facebook
-        </a>
-        <a href="https://www.instagram.com/jpes.kg?utm_source=qr&igsh=MWx4d2sxdHRqMjNybg==" target="_blank" class="footer-link" style="margin-top:10px; display:block;">
-            📸 Instagram
-        </a>
+        <a href="https://www.facebook.com/100013104250618/" target="_blank" class="footer-link">📘 Facebook</a>
+        <a href="https://www.instagram.com/jpes.kg?utm_source=qr" target="_blank" class="footer-link" style="margin-top:10px; display:block;">📸 Instagram</a>
     </div>
-
 </div>
 
-<style>
-/* Премиум футер */
-.footer {
-    margin-top: 60px;
-    padding: 50px 20px; /* чуть больше высота футера */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: linear-gradient(135deg, #1e3a8a, #0f172a);
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-    position: relative;
-    flex-wrap: wrap;
+<script>
+function scrollToSection(id) {
+    const el = document.getElementById(id);
+    if(el) el.scrollIntoView({behavior:"smooth"});
 }
 
-.footer-block {
-    text-align: center;
-    flex: 1;
-    min-width: 150px;
-}
+const galleryImages = [
+    {% for item in remaining_items %}
+        {% if item.item_type == "photo" %}
+            "{{ item.image.url }}"{% if not forloop.last %},{% endif %}
+        {% endif %}
+    {% endfor %}
+];
 
-.footer-title {
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: #a5b4fc;
-    font-size: 16px;
-}
+let currentIndex = 0;
 
-.footer-link {
-    display: inline-block;
-    font-size: 18px;
-    font-weight: 600;
-    color: #60a5fa;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
+function openGallery(img, index) {
+    currentIndex = index;
+    const overlay = document.createElement('div');
+    overlay.id = 'gallery-overlay';
 
-.footer-link:hover {
-    color: #ffffff;
-    transform: scale(1.1);
-}
+    const displayImg = document.createElement('img');
+    displayImg.src = galleryImages[currentIndex];
+    overlay.appendChild(displayImg);
 
-/* Логотип по центру максимально большой */
-.footer-logo-wrapper {
-    flex: 2; /* занимает больше места по центру */
-    display: flex;
-    justify-content: center;
-}
+    const controls = document.createElement('div');
+    controls.className = 'controls';
 
-.company-logo {
-    height: 120px; /* высота большая, видно сразу */
-    width: auto;   /* сохраняем пропорции */
-    opacity: 0.95;
-    border-radius: 15px;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.4);
-    transition: transform 0.3s ease;
-}
+    const prevBtn = document.createElement('button');
+    prevBtn.textContent = '⬅ Пред';
+    prevBtn.onclick = (e) => {
+        e.stopPropagation();
+        currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+        displayImg.src = galleryImages[currentIndex];
+    };
 
-.company-logo:hover {
-    transform: scale(1.05);
-}
+    const nextBtn = document.createElement('button');
+    nextBtn.textContent = 'След ➡';
+    nextBtn.onclick = (e) => {
+        e.stopPropagation();
+        currentIndex = (currentIndex + 1) % galleryImages.length;
+        displayImg.src = galleryImages[currentIndex];
+    };
 
-/* Адаптация под мобильные */
-@media (max-width: 900px) {
-    .footer {
-        flex-direction: column;
-        text-align: center;
-        padding: 40px 20px;
-    }
-    .footer-block {
-        margin-bottom: 20px;
-    }
-    .footer-logo-wrapper {
-        margin: 20px 0;
-    }
-    .company-logo {
-        height: 100px; /* чуть меньше на маленьких экранах */
-        width: auto;
-    }
+    controls.appendChild(prevBtn);
+    controls.appendChild(nextBtn);
+    overlay.appendChild(controls);
+
+    overlay.onclick = () => overlay.remove();
+    document.body.appendChild(overlay);
 }
-</style>
+</script>
+
+</body>
+</html>
