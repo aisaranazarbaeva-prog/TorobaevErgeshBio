@@ -9,60 +9,64 @@ def home(request):
 
     items = bio.items.all()
 
-    first_text = None
-    hero_photo = None
-    remaining_items = []
+    texts = []
+    photos = []
+    videos = []
 
     for item in items:
-        if item.item_type == 'photo' and not hero_photo:
-            hero_photo = item
+        if item.item_type == "text":
+            texts.append(item)
 
-        elif item.item_type == 'text' and not first_text:
-            first_text = item
+        elif item.item_type == "photo":
+            photos.append(item)
 
-        else:
-            # Обработка YouTube ссылок
-            if item.item_type == 'video' and item.youtube_url:
-                url = item.youtube_url.strip()
-                video_id = None
+        elif item.item_type == "video" and item.youtube_url:
+            url = item.youtube_url.strip()
+            video_id = None
 
-                if "watch?v=" in url:
-                    video_id = url.split("watch?v=")[1].split("&")[0]
-                elif "youtu.be/" in url:
-                    video_id = url.split("youtu.be/")[1].split("?")[0]
+            if "watch?v=" in url:
+                video_id = url.split("watch?v=")[1].split("&")[0]
+            elif "youtu.be/" in url:
+                video_id = url.split("youtu.be/")[1].split("?")[0]
 
-                if video_id:
-                    item.youtube_embed_url = f"https://www.youtube.com/embed/{video_id}"
-                else:
-                    item.youtube_embed_url = None
+            if video_id:
+                item.youtube_embed_url = f"https://www.youtube.com/embed/{video_id}"
+                videos.append(item)
 
-            remaining_items.append(item)
+    # HERO PHOTO (биринчи сүрөт)
+    hero_photo = photos[0] if photos else None
 
-    # Пример достижений
+    # Тексттер: 1,2,3
+    text1 = texts[0] if len(texts) > 0 else None
+    text2 = texts[1] if len(texts) > 1 else None
+    text3 = texts[2] if len(texts) > 2 else None
+
     achievement_texts = [
-        "1971 жана 1979-жылдары Кыргыз ССРинин Жогорку Кеңешинин “Ардак Грамотасы” менен сыйланган.",
-        "1980-жылы “КЫРГЫЗ ССРинин ЭМГЕК СИҢИРГЕН ЭНЕРГЕТИГИ” наамы берилген.",
-        "1987-жылы “СССРдин энергетика жана электрофикациясынын отличниги” деген наам берилген.",
-        "1995-жылы Кыргыз Республикасынын “Ардак грамотасы” менен сыйланган.",
-        "1995-жылы “Манас-1000” Эстелик медалы менен сыйланган.",
-        "1997-жылы “Жалал-Абад шаарынын ардактуу атуулу” наамы ыйгарылган.",
-        "1998-жылы Кыргыз Республикасынын “Үчүнчү даражадагы Манас” ордени менен сыйланган.",
-        "2001-жылы “Сузак районунун ардактуу атуулу” наамын алган.",
-        "2001-жылы ЖАМУнун “Ардактуу профессору” наамы ыйгарылган.",
-        "2002-жылы “КМШнын эмгек сиңирген энергетиги” белгиси менен сыйланган.",
-        "2002-жылы “Ош-3000” медалы ыйгарылган.",
-        "2004-жылы II класстагы Мамлекеттик кеңешчи наамы берилген.",
+        "1971 жана 1979-жылдары Кыргыз ССРинин Жогорку Кеңешинин Ардак Грамотасы менен сыйланган.",
+        "1980-жылы Кыргыз ССРинин эмгек сиңирген энергетиги наамы берилген.",
+        "1987-жылы СССРдин энергетикасынын отличниги.",
+        "1995-жылы Кыргыз Республикасынын Ардак грамотасы.",
+        "1995-жылы Манас-1000 эстелик медалы.",
+        "1997-жылы Жалал-Абад шаарынын ардактуу атуулу.",
+        "1998-жылы Манас ордени (III даража).",
+        "2001-жылы Сузак районунун ардактуу атуулу.",
+        "2001-жылы ЖАМУнун ардактуу профессору.",
+        "2002-жылы КМШнын эмгек сиңирген энергетиги.",
+        "2002-жылы Ош-3000 медалы.",
+        "2004-жылы II класстагы мамлекеттик кеңешчи.",
         "2006-жылы КМШнын Ардак грамотасы.",
         "2007-жылы Петр I ордени.",
         "2012-жылы көмөк чордонго аты берилген.",
         "2025-жылы Жалал-Абад облусунун ардактуу атуулу."
     ]
+
     achievements = [{"text": a} for a in achievement_texts]
 
     return render(request, "home.html", {
         "bio": bio,
         "hero_photo": hero_photo,
-        "first_text": first_text,
-        "remaining_items": remaining_items,
+        "texts": [text1, text2, text3],
+        "photos": photos,
+        "videos": videos,
         "achievements": achievements
     })

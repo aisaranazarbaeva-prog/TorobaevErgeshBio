@@ -195,22 +195,34 @@ body::before {
 
 <!-- Footer -->
 <div class="footer">
+
     <div class="footer-block">
         <p class="footer-title">Веб-баракча заказ кылуу үчүн</p>
-        <a href="https://wa.me/996999011166" target="_blank" class="footer-link">📞 +996 999 011 166</a>
+        <a href="https://wa.me/996999011166" target="_blank" class="footer-link">
+            📞 +996 999 011 166
+        </a>
     </div>
+
     <div class="footer-logo-wrapper">
-        {% with last_photo=remaining_items|last %}
-            {% if last_photo.item_type == "photo" %}
-                <img src="{{ last_photo.image.url }}" class="company-logo" alt="Компания логотиби">
-            {% endif %}
-        {% endwith %}
+        {% if photos %}
+            <img src="{{ photos|last.image.url }}"
+                 class="company-logo"
+                 alt="Компания логотиби">
+        {% endif %}
     </div>
+
     <div class="footer-block">
         <p class="footer-title">Жана башка маалыматтар</p>
-        <a href="https://www.facebook.com/100013104250618/" target="_blank" class="footer-link">Facebook</a>
-        <a href="https://www.instagram.com/jpes.kg?utm_source=qr" target="_blank" class="footer-link" style="margin-top:10px; display:block;">Instagram</a>
+        <a href="https://www.facebook.com/100013104250618/"
+           target="_blank"
+           class="footer-link">Facebook</a>
+
+        <a href="https://www.instagram.com/jpes.kg?utm_source=qr"
+           target="_blank"
+           class="footer-link"
+           style="margin-top:10px; display:block;">Instagram</a>
     </div>
+
 </div>
 
 <script>
