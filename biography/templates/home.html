@@ -203,13 +203,9 @@ body::before {
     </div>
 
     <div class="footer-logo-wrapper">
-        {% if photos %}
-            {% with logo=photos|last %}
-                <img src="{{ logo.image.url }}"
-                     class="company-logo"
-                     alt="Компания логотиби">
-            {% endwith %}
-        {% endif %}
+        <img src="{% static 'images/logo.png' %}"
+             class="company-logo"
+             alt="Компания логотиби">
     </div>
 
     <div class="footer-block">
@@ -225,6 +221,7 @@ body::before {
     </div>
 
 </div>
+
 
 
 <script>
