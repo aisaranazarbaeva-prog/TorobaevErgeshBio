@@ -193,7 +193,6 @@ body::before {
 
 </div>
 
-<!-- Footer -->
 <div class="footer">
 
     <div class="footer-block">
@@ -205,8 +204,8 @@ body::before {
 
     <div class="footer-logo-wrapper">
         {% if photos %}
-            {% with last_photo=photos|last %}
-                <img src="{{ last_photo.image.url }}"
+            {% with logo=photos|last %}
+                <img src="{{ logo.image.url }}"
                      class="company-logo"
                      alt="Компания логотиби">
             {% endwith %}
@@ -226,6 +225,7 @@ body::before {
     </div>
 
 </div>
+
 
 <script>
 function scrollToSection(id) {
