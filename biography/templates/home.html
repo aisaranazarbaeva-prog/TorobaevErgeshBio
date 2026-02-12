@@ -18,12 +18,15 @@ body {
 body::before {
     content: "";
     position: fixed;
-    top:0; left:0;
-    width:100%; height:100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     background: radial-gradient(circle, rgba(96,165,250,0.05) 1px, transparent 1px);
     background-size: 40px 40px;
-    z-index: -1;
+    z-index: 0;
+    pointer-events: none;
+    transform: translateZ(0);
 }
+
 
 .container { max-width: 1200px; margin: auto; padding: 60px 20px; }
 
@@ -113,6 +116,25 @@ body::before {
     .footer-block { margin-bottom:20px; }
     .footer-logo-wrapper { margin:20px 0; }
     .company-logo { height:100px; }
+}
+
+    /* ================== МЕДИАЗАПРОСЫ ================== */
+@media (max-width: 900px) {
+    .footer { flex-direction: column; text-align: center; padding: 40px 20px; }
+    .footer-block { margin-bottom: 20px; }
+    .footer-logo-wrapper { margin: 20px 0; }
+    .company-logo { height: 100px; }
+}
+
+@media (max-width: 600px) {
+    .hero { flex-direction: column; text-align: center; padding: 20px; }
+    .hero-photo img { width: 200px; margin-top: 15px; }
+    .hero-text h1 { font-size: 28px; }
+    .hero-text p { font-size: 16px; }
+    .section { padding: 15px; background: rgba(0,0,50,0.2); }
+    .footer { padding: 30px 15px; flex-direction: column; text-align: center; }
+    .footer-logo-wrapper { margin: 15px 0; }
+    .company-logo { height: 80px; }
 }
 </style>
 </head>
