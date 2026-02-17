@@ -159,7 +159,7 @@ body::before {
         {% endif %}
     </div>
 </div>
-
+{% endif %}
 <!-- BIO -->
 <div id="bio" class="section">
 <h2>Биография</h2>
@@ -175,7 +175,6 @@ body::before {
     {% endif %}
 {% endfor %}
 </div>
-{% endfor %}
 <!-- Галерея -->
 <div id="gallery" class="section">
 <h2>Сүрөттөр</h2>
@@ -301,3 +300,4 @@ function openGallery(img, index) {
 
 </body>
 </html>
+{% endif %}
